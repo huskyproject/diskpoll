@@ -1,3 +1,5 @@
+#include "envdeps.h"
+
 #ifdef INCS_NEED_DOT_H
 #include <iostream.h>
 #include <fstream.h>
@@ -24,7 +26,6 @@
 #include "words.h"
 #include "prepcfg.h"
 #include "carray.h"
-#include "envdeps.h"
 #include "copyfile.h"
 
                         // returns: 0: OK, 1: empty line, 2: not a section
@@ -33,7 +34,7 @@ static int getSectionName(const CString& strLine, CString& strSectionname)
 {
   TWords words(""); unsigned long nwords;
   CString strRaw;
-  
+
   words=prepareConfigString(strLine); nwords=words.getNWords();
 
   if (nwords>1)
@@ -71,7 +72,7 @@ static void doCall(const CString& strConfig, const CString& strUplink, const
     {
       CString strLine;
       CString strSectionname;
-      
+
       ifs >> strLine;
       switch(getSectionName(strLine,strSectionname))
         {
@@ -82,7 +83,7 @@ static void doCall(const CString& strConfig, const CString& strUplink, const
 
         case 1:                 // empty line
           continue;
-          
+
         default:                // new section
           {
             CSystem *paSystem=new CSystem((COutbound*)NULL,
@@ -132,7 +133,7 @@ static void doCall(const CString& strConfig, const CString& strUplink, const
 
   ifs.close();
 }
-  
+
 int main(int argc, char **argv)
 {
   int i,help=0;
@@ -160,7 +161,7 @@ int main(int argc, char **argv)
         case 's':
         case 'r':
           int flav; char *cp;
-          
+
           for (cp = optarg, flav = 0; *cp != '\0' && *cp != '?'; cp++)
             {
               switch(toupper(*cp))
@@ -187,7 +188,7 @@ int main(int argc, char **argv)
           else
             receiveFlavour = flav;
           break;
-                    
+
         case 'c':
           cpConfigfile=optarg;
           break;
@@ -229,7 +230,7 @@ int main(int argc, char **argv)
         << "          -w          enable workaround for broken operating system copy API\n"
 #endif
         ;
-            
+
     }
   else
     {

@@ -7,12 +7,12 @@
 #include "cstring.h"
 
 CString::CString()
-{ 
+{
   buffer=0; length=alloc_len=0;
 }
 
 CString::CString(const CString &s)
-{ 
+{
   if ((const char *)s!=0)
   {
     CheckPointer(buffer=new char[(length=alloc_len=s.Length())+1],
@@ -41,18 +41,23 @@ CString::CString(const char *cp)
 }
 
 CString::~CString()
-{ 
+{
   if (buffer) delete [] buffer;
   buffer=0; length=alloc_len=0;
 }
 
 CString::operator char*()
-{ 
+{
+  return buffer;
+}
+
+CString::operator const char*()
+{
   return buffer;
 }
 
 CString::operator const char*() const
-{ 
+{
   return buffer;
 }
 
@@ -78,7 +83,7 @@ CString CString::substr(size_t i,size_t j) const
 
 
 CString& CString::operator +=(const CString &s)
-{ 
+{
   char *cp=new char[(length=alloc_len=length+s.Length())+1];
   CheckPointer(cp,"CString::operator +=::memory allocation");
   *cp=0; if (buffer) strcpy(cp,buffer);
@@ -114,7 +119,7 @@ CString& CString::operator +=(const char &c)
 
 
 CString& CString::operator =(const CString &s)
-{ 
+{
   if (buffer) delete[] buffer;
   if ((const char *)s!=0)
     {
@@ -133,16 +138,16 @@ CString& CString::operator =(const CString &s)
 
 
 /* Due to bad class design in my code, the following does not work
-   any more with GCC 2.8 
+   any more with GCC 2.8
 
 char& CString::operator[](const size_t index)
-{ 
+{
   CheckUpperBound(index,length,"CString::operator[]");
   return *(buffer+index);
 }
 
 char& CString::operator[](const size_t index) const
-{ 
+{
   CheckUpperBound(index,length,"CString::operator[]");
   return *(buffer+index);
 }
@@ -152,24 +157,24 @@ It is replaced with the following:
 
 
 char& CString::charAt(const size_t index) const
-{ 
+{
   CheckUpperBound(index,length,"CString::operator[]");
   return *(buffer+index);
 }
 
 char& CString::setCharAt(const size_t index, const char& c)
-{ 
+{
   CheckUpperBound(index,length,"CString::operator[]");
   return *(buffer+index) = c;
 }
 
 int CString::operator== (const CString &s) const
-{ 
+{
   return ((*this)==(const char*)s);
 }
 
 int CString::operator== (const char *s) const
-{ 
+{
   if (s==0||buffer==0)
     return s==buffer;
   if (strlen(s)==length)
@@ -178,7 +183,7 @@ int CString::operator== (const char *s) const
 }
 
 int CString::operator== (char *s) const
-{ 
+{
   if (s==0||buffer==0)
     return s==buffer;
   if (strlen(s)==length)
@@ -187,7 +192,7 @@ int CString::operator== (char *s) const
 }
 
 CString operator + (const CString &s1, const CString &s2)
-{ 
+{
   CString tmp;
 
   tmp=s1;
@@ -196,7 +201,7 @@ CString operator + (const CString &s1, const CString &s2)
 }
 
 ostream& operator << (ostream& o, const CString&s)
-{ 
+{
   o << (const char *)s;
   return o;
 }
@@ -221,7 +226,7 @@ istream& operator >> (istream& i, CString&s)
 }
 
 size_t CString::Length() const
-{ 
+{
   return length;
 }
 

@@ -21,6 +21,7 @@ class CString
              size_t Length() const;
 
              operator const char *() const;
+             operator const char *();
              operator char*();
              CString  substr(size_t,size_t) const;
              CString& operator +=(const CString &);
