@@ -1,5 +1,5 @@
 # include Husky-Makefile-Config
-include ../../huskymak.cfg
+include ../huskymak.cfg
 
 ifeq ($(DEBUG), 1)
   CFLAGS=-Wall -pedantic -O3 -g
@@ -8,9 +8,6 @@ else
 endif
 
 CDEFS=-DNOEXCEPTIONS $(ADDCDEFS)
-
-.cc$(OBJ):
-	$(GPP) -c $(CFLAGS) $(CDEFS) $<
 
 OBJFILES = \
  main$(OBJ) \
@@ -30,6 +27,9 @@ OBJFILES = \
 default: diskpoll$(EXE)
 
 all: diskpoll$(EXE)
+
+%$(OBJ): src$(DIRSEP)%.cc
+	$(GPP) -c $(CFLAGS) $(CDEFS) $<
 
 diskpoll: $(OBJFILES)
 	$(GPP) $(CFLAGS) $(CDEFS) -o diskpoll$(EXE) $(OBJFILES)
