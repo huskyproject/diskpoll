@@ -14,7 +14,18 @@
 #error "Only OS/2 or NT platforms supported for EMX gcc"
 #else
 #define VSNPRINTF(a,b,c,d) vsnprintf(a,b,c,d)    // emx as vsnprintf!
-#define NEED_GETOPTH           // include getopt.h when using getopt
+
+// #define NEED_GETOPTH
+// pgcc getopt.h has getopt prototype with empty args list - this won't
+// work for C++, so we need our own prototypes
+extern "C" {
+int getopt (int argc, char *const *argv, const char *shortopts);
+extern char *optarg;
+extern int optind;
+extern int opterr;
+extern int optopt;
+}
+
 //#define SHORTINCLUDEFILENAMES  // use strstrea.h, not strstream.h
 #define DEFDIRSEP '\\'
 #define DEFCONFIGFILE "./diskpoll.cfg"
@@ -39,7 +50,7 @@
 #error "The DOS version requires DJGPP as compiler!"
 
 // ------- These settings are for Unix (FreeBSD, AIX, Linux, ...) -------
-#else 
+#else
 #define UNIXLIKE
 #ifdef  HAVE_VSNPRINTF
 #define VSNPRINTF(a,b,c,d) vsnprintf(a,b,c,d)
