@@ -46,13 +46,13 @@ install:
 	$(INSTALL) $(IBOPT) diskpoll$(EXE) $(BINDIR)
 
 uninstall:
-	-$(RM) $(BINDIR)$(DIRSEP)diskpoll$(EXE)
+	-$(RM) $(RMOPT) $(BINDIR)$(DIRSEP)diskpoll$(EXE)
 
 clean:
-	-$(RM) *$(OBJ)
-	-$(RM) core
-	-$(RM) *~
+	-$(RM) $(RMOPT) *$(OBJ)
+	-$(RM) $(RMOPT) core
+	-$(RM) $(RMOPT) *~
 
 distclean: clean
-	-$(RM) diskpoll$(EXE)
+	-$(RM) $(RMOPT) diskpoll$(EXE)
 
