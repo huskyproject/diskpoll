@@ -1,7 +1,16 @@
 # Makefile for the DJGPP v2.0 GNU compiler for DOS/DPMI
 
+# include Husky-Makefile-Config
+include ../../huskymak.cfg
+
 GPP=gcc
-CFLAGS=-D__DOS__ -O3 -Wall -pedantic  -DNOEXCEPTIONS
+
+ifeq ($(DEBUG), 1)
+  CFLAGS=-D__DOS__ -O3 -Wall -pedantic  -DNOEXCEPTIONS -g
+else
+  CFLAGS=-D__DOS__ -O3 -Wall -pedantic  -DNOEXCEPTIONS -s
+endif
+
 EXE=.exe
 OBJ=.o
 

@@ -1,0 +1,52 @@
+# Makefile for Windows 95/NT using the RSXNT GNU compiler
+
+# include Husky-Makefile-Config
+include ../../huskymak.cfg
+
+GPP=gcc
+ifeq ($(DEBUG), 1)
+  CFLAGS=-D__NT__ -O3 -Wall -pedantic -Zwin32 -Zsys -DNOEXCEPTIONS -g
+else
+  CFLAGS=-D__NT__ -O3 -Wall -pedantic -Zwin32 -Zsys -DNOEXCEPTIONS -s
+endif
+
+EXE=.exe
+OBJ=.o
+
+%$(OBJ) : %.cc
+	 $(GPP) -c $(CFLAGS) $<
+
+OFILES = \
+ main$(OBJ) \
+ cnode$(OBJ) \
+ cstring$(OBJ) \
+ coutb$(OBJ) \
+ cbinkout$(OBJ) \
+ findfile$(OBJ) \
+ copyfile$(OBJ) \
+ cinbound$(OBJ) \
+ csystem$(OBJ) \
+ words$(OBJ) \
+ csplout$(OBJ) \
+ prepcfg$(OBJ) \
+ log$(OBJ)
+
+default: diskpoll$(EXE)
+
+all: diskpoll$(EXE)
+
+diskpoll$(EXE): $(OFILES)
+	$(GPP) $(CFLAGS) -o diskpoll$(EXE) $(OFILES) -lstdcpp
+
+install:
+	copy diskpoll $(BINDIR)
+
+clean:
+	-cmd /c del *.o
+	-cmd /c del *.obj
+	-cmd /c del core
+	-cmd /c del *~
+
+distclean: clean
+	-cmd /c del diskpoll$(EXE)
+
