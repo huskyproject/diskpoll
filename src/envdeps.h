@@ -48,7 +48,7 @@
 #else
 #define VSNPRINTF(a,b,c,d) vsprintf(a,c,d)
 #endif
-//#define NEED_GETOPTH
+#define NEED_GETOPTH
 //#define SHORTINCLUDEFILENAMES
 #define DEFDIRSEP '/'
 #define DEFCONFIGFILE "/usr/local/etc/diskpoll.cfg"
