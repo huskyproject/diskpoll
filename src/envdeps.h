@@ -46,15 +46,18 @@
 #else
 #define VSNPRINTF(a,b,c,d) vsprintf(a,c,d)
 #endif
-#ifndef __FreeBSD__
+#if !defined(__FreeBSD__) && !defined(__NetBSD__)
 #define NEED_GETOPTH
+#endif
+#ifdef __NetBSD__
+#define NEED_UNISTDH
 #endif
 //#define SHORTINCLUDEFILENAMES
 #define DEFDIRSEP '/'
 #define DEFCONFIGFILE "/usr/local/etc/diskpoll.cfg"
 #define ALLFILES "*"
 #include <sys/stat.h> /* for mkdir */
-#if defined(__FreeBSD__) || defined(_AIX) || defined(__osf__) || defined(__GLIBC__)
+#if defined(__NetBSD__) || defined(__FreeBSD__) || defined(_AIX) || defined(__osf__) || defined(__GLIBC__)
 #define mymkdir(a) mkdir((a), 0777)
 #else
 #define mymkdir(a) __mkdir((a), 0777)
