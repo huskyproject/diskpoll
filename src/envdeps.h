@@ -54,7 +54,7 @@
 #define DEFCONFIGFILE "/usr/local/etc/diskpoll.cfg"
 #define ALLFILES "*"
 #include <sys/stat.h> /* for mkdir */
-#if defined(__FreeBSD__) || defined(_AIX) || defined(__osf__)
+#if defined(__FreeBSD__) || defined(_AIX) || defined(__osf__) || defined(__GLIBC__)
 #define mymkdir(a) mkdir((a), 0777)
 #else
 #define mymkdir(a) __mkdir((a), 0777)
