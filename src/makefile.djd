@@ -6,9 +6,9 @@ include ../../huskymak.cfg
 GPP=gcc
 
 ifeq ($(DEBUG), 1)
-  CFLAGS=-D__DOS__ -O3 -Wall -pedantic  -DNOEXCEPTIONS -g
+  CFLAGS=-I$(INCDIR) -D__DOS__ -O3 -Wall -pedantic  -DNOEXCEPTIONS -g
 else
-  CFLAGS=-D__DOS__ -O3 -Wall -pedantic  -DNOEXCEPTIONS -s
+  CFLAGS=-I$(INCDIR) -D__DOS__ -O3 -Wall -pedantic  -DNOEXCEPTIONS -s
 endif
 
 EXE=.exe

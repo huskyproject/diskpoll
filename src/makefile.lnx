@@ -5,11 +5,12 @@ DEBUG=0
 EXE=
 IBOPT=-s
 BINDIR=/usr/local/bin
+INCDIR=/usr/local/include
 
 ifeq ($(DEBUG), 1)
-  CFLAGS=-DNOEXCEPTIONS -Wall -pedantic -O3 -g
+  CFLAGS=-I$(INCDIR) -DNOEXCEPTIONS -Wall -pedantic -O3 -g
 else
-  CFLAGS=-DNOEXCEPTIONS -Wall -pedantic -O3 -s
+  CFLAGS=-I$(INCDIR) -DNOEXCEPTIONS -Wall -pedantic -O3 -s
 endif
 
 .cc.o:

@@ -6,9 +6,9 @@ include ../../huskymak.cfg
 GPP=gcc
 
 ifeq ($(DEBUG), 1)
-  CFLAGS=-DNOEXCEPTIONS -Wall -pedantic -g -DNEED_UNISTDH
+  CFLAGS=-I$(INCDIR) -DNOEXCEPTIONS -Wall -pedantic -g -DNEED_UNISTDH
 else
-  CFLAGS=-DNOEXCEPTIONS -Wall -pedantic -s -DNEED_UNISTDH
+  CFLAGS=-I$(INCDIR) -DNOEXCEPTIONS -Wall -pedantic -s -DNEED_UNISTDH
 endif
 
 .cc.o:
