@@ -1,8 +1,13 @@
+#ifdef INCS_NEED_DOT_H
+#include <stdlib.h>             // NULL
+#include <fstream.h>            // ofstream
+#else
+#include <stdlib>             // NULL
+#include <fstream>            // ofstream
+#endif
 #include "envdeps.h"
 #include "cnode.h"
 #include "csystem.h"
-#include <stdlib.h>             // NULL
-#include <fstream.h>            // ofstream
 #include "log.h"
 #include "prepcfg.h"
 #include "cbinkout.h"

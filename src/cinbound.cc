@@ -1,8 +1,14 @@
-#include "cinbound.h"
+#ifdef INCS_NEED_DOT_H
 #include <stdio.h>
 #include <fstream.h>
-#include "copyfile.h"
 #include <ctype.h>
+#else
+#include <stdio>
+#include <fstream>
+#include <ctype>
+#endif
+#include "cinbound.h"
+#include "copyfile.h"
 #include "log.h"
 
 void CInbound::makevalidpath()

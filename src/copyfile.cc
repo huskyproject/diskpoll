@@ -10,9 +10,15 @@
 #include <windows.h>
 #endif
 
+#ifdef INCS_NEED_DOT_H
 #include <errno.h>
 #include <stdio.h>              // remove
 #include <fstream.h>
+#else
+#include <errno>
+#include <stdio>              // remove
+#include <fstream>
+#endif
 #include "findfile.h"
 
 /* copyfile is expected to ...

@@ -1,9 +1,14 @@
 #ifndef __CSTRING_HPP
 #define __CSTRING_HPP
 
+#ifdef INCS_NEED_DOT_H
 #include <string.h>
 #include <iostream.h>
-#
+#else
+#include <string>
+#include <iostream>
+#endif
+
 class CString
 { protected: char *buffer;
              size_t length;

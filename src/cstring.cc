@@ -1,4 +1,8 @@
+#ifdef INCS_NEED_DOT_H
 #include <ctype.h>
+#else
+#include <ctype>
+#endif
 #include "cerror.h"
 #include "cstring.h"
 

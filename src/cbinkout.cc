@@ -1,15 +1,30 @@
 #include "envdeps.h"
 #ifdef SHORTINCLUDEFILENAMES
+#ifdef INCS_NEED_DOT_H
 #include <strstrea.h>           // strstream
 #else
+#include <strstrea>           // strstream
+#endif
+#else
+#ifdef INCS_NEED_DOT_H
 #include <strstream.h>
+#else
+#include <strstream>
+#endif
 #endif
 #include "findfile.h"
 #include "cbinkout.h"
+#ifdef INCS_NEED_DOT_H
 #include <stdlib.h>             // abort
 #include <fstream.h>
 #include <stdio.h>              // unlink
 #include <ctype.h>
+#else
+#include <stdlib.h>             // abort
+#include <fstream.h>
+#include <stdio.h>              // unlink
+#include <ctype.h>
+#endif
 #include "log.h"
 
 

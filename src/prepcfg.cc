@@ -1,7 +1,12 @@
-#include "words.h"
-#include "cstring.h"
+#ifdef INCS_NEED_DOT_H
 #include <stdlib.h>             // getenv
 #include <ctype.h>              // isspace
+#else
+#include <stdlib>             // getenv
+#include <ctype>              // isspace
+#endif
+#include "words.h"
+#include "cstring.h"
 
 static CString env_expand(const CString& rawString)
 {

@@ -1,10 +1,15 @@
-#include "findfile.h"
-#include "envdeps.h"
-
+#ifdef INCS_NEED_DOT_H
 #include <sys/types.h>
 #include <dirent.h>
 #include <ctype.h>
+#else
+#include <sys/types>
+#include <dirent>
+#include <ctype>
+#endif
 
+#include "findfile.h"
+#include "envdeps.h"
 
 // ==================================================================== 
 // patmat: a routine for pattern matching

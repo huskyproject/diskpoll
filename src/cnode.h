@@ -1,7 +1,11 @@
 #ifndef __NODE_H
 #define __NODE_H
 
+#ifdef INCS_NEED_DOT_H
 #include <iostream.h>
+#else
+#include <iostream>
+#endif
 #include "cstring.h"
 
 class CNode

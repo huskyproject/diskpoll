@@ -1,7 +1,12 @@
-#include "words.h"
-#include "cerror.h"
+#ifdef INCS_NEED_DOT_H
 #include <ctype.h>
 #include <stdlib.h> /* NULL */
+#else
+#include <ctype>
+#include <stdlib> /* NULL */
+#endif
+#include "words.h"
+#include "cerror.h"
 
 TWords::TWords(char *cpWord)
 { char *cp;

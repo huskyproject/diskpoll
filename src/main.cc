@@ -1,6 +1,24 @@
+#ifdef INCS_NEED_DOT_H
 #include <iostream.h>
 #include <fstream.h>
 #include <ctype.h>
+#ifdef NEED_GETOPTH
+#include <getopt.h>
+#endif
+#ifdef NEED_UNISTDH
+#include <unistd.h>
+#endif
+#else
+#include <iostream>
+#include <fstream>
+#include <ctype>
+#ifdef NEED_GETOPTH
+#include <getopt>
+#endif
+#ifdef NEED_UNISTDH
+#include <unistd>
+#endif
+#endif
 #include "csystem.h"
 #include "log.h"
 #include "words.h"
@@ -8,12 +26,6 @@
 #include "carray.h"
 #include "envdeps.h"
 #include "copyfile.h"
-#ifdef NEED_GETOPTH
-#include <getopt.h>
-#endif
-#ifdef NEED_UNISTDH
-#include <unistd.h>
-#endif
 
                         // returns: 0: OK, 1: empty line, 2: not a section
 

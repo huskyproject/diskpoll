@@ -16,7 +16,11 @@
    Should both be equivalent.
 */
 
+#ifdef INCS_NEED_DOT_H
 #include <iostream.h>
+#else
+#include <iostream>
+#endif
 #include "envdeps.h"
 #include "findfile.h"
 

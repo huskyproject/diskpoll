@@ -1,9 +1,16 @@
+#ifdef INCS_NEED_DOT_H
 #include <stdarg.h>
 #include <stdio.h>              // sprintf
-#include "envdeps.h"
-#include "log.h"
 #include <iostream.h>
 #include <time.h>
+#else
+#include <stdarg>
+#include <stdio>              // sprintf
+#include <iostream>
+#include <time>
+#endif
+#include "envdeps.h"
+#include "log.h"
 
 int debug_mode = 0;
 

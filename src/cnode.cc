@@ -1,14 +1,28 @@
-#include "cnode.h"
-#include "cstring.h"
+#ifdef INCS_NEED_DOT_H
 #include <ctype.h>
 #include <stdlib.h>
-#include "envdeps.h"
+#include <string.h>
+#else
+#include <ctype>
+#include <stdlib>
+#include <string>
+#endif
 #ifdef SHORTINCLUDEFILENAMES
+#ifdef INCS_NEED_DOT_H
 #include <strstrea.h>
 #else
-#include <strstream.h>
+#include <strstrea>
 #endif
-#include <string.h>
+#else
+#ifdef INCS_NEED_DOT_H
+#include <strstream.h>
+#else
+#include <strstream>
+#endif
+#endif
+#include "cnode.h"
+#include "cstring.h"
+#include "envdeps.h"
 
 CNode::CNode(const long zone, const long net, const long node, const long
              point, const CString& strDomain):strDomain()

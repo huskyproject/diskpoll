@@ -1,5 +1,11 @@
+#ifdef INCS_NEED_DOT_H
 #include <assert.h>
 #include <stdlib.h>
+#else
+#include <assert>
+#include <stdlib>
+#endif
+
                                 // included by carray.h - anders gehts wohl
                                 // nicht 
 

@@ -1,13 +1,20 @@
+#ifdef INCS_NEED_DOT_H
+#include <stdio.h>              // remove
+#include <sys/types.h>
+#include <dirent.h>
+#include <sys/stat.h>
+#else
+#include <stdio>              // remove
+#include <sys/types>
+#include <dirent>
+#include <sys/stat>
+#endif
 #include "csplout.h"
 #include "cerror.h"
 #include "cinbound.h"
 #include "findfile.h"
 #include "envdeps.h"
 #include "coutb.h"
-#include <stdio.h>              // remove
-#include <sys/types.h>
-#include <dirent.h>
-#include <sys/stat.h>
 
 #define unused(x) ((void)(x));
 

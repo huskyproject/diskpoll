@@ -27,7 +27,11 @@ class CError
 #endif
 
 #ifdef NOEXCEPTIONS
+#ifdef INCS_NEED_DOT_H
 #include <stdlib.h>
+#else
+#include <stdlib>
+#endif
 #ifdef NOCHECKPOINTERS
   #define CheckPointer(ptr,msg) (ptr)
 #else
