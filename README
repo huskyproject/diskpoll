@@ -73,14 +73,23 @@ closedir.  To my knowledge, EMX GCC is the only compiler that supports these
 commands on OS/2, and EMX GCC with RSXNT extensions is the only compiler
 that supports them on Windows NT.
 
-You should use "makefile.os2.emx" for OS/2 (it is designed for GNU make,
-found as GNUMAKE.ZIP on ftp.cdrom.com), "makefile.nt.rsx" for Windows
-95/98/NT, "makefile.djg" for DOS and "makefile" for Linux or other Unix
-systems.  "makefile.os2.egcs" is for the egcs 1.0 - derived OS/2
+If you are familiar with the Husky build process (using a top-level
+huskymak.cfg), you can use the top-level "Makefile" found in this archive,
+and use "make all install", just like for any other Husky tool (see the
+INSTALL file in the huskybse package for more information).
+
+If you aren't, you should change to the "src" subdirectory and use one of
+the makefiles found there.  These are standalone makefiles that work
+without any dependence on any Husky package.
+
+You should use "makefile.emx" for OS/2 (it is designed for GNU make,
+found as GNUMAKE.ZIP on ftp.cdrom.com), "makefile.rsx" for Windows
+95/98/NT, "makefile.djg" for DOS and "makefile.unx" for Linux or other Unix
+systems.  "makefile.pgx" is for the egcs 1.0 - derived OS/2
 pentium-optimized pgcc compiler from Andrew Zabolotny.
 
 There is a internal bug in GCC 2.7.2 though, that yields internal compiler
-errors when compiling with exception support.  Hence, the supplied makfiles
+errors when compiling with exception support.  Hence, the supplied makefiles
 (makefile.os2 for OS/2, makefile for Unix) conatain "-DNOEXCEPTIONS" in the
 CFLAGS variable.  If you have a newer version of GCC, you may replace
 "-DNOEXCEPTIONS" by "-fhandle-exceptions" (or "-fexceptions" if you use
@@ -187,7 +196,7 @@ c) Description of the configuration keywords.
      Works the same way as "Aka". It is just a synonym.
 
    Mailflag <filename>
-   
+
      The file with the given <filename> and zero length will be created if
      this particular system has received any files during a diskpoll transfer.
      You can use this to notify the remote site to immediately toss the mail.
@@ -312,7 +321,7 @@ logfile, you should invoke diskpoll like this:
 
    diskpoll  >diskpoll.log 2>&1
 
-Place any other options you might want to specify between "diskpoll" and 
+Place any other options you might want to specify between "diskpoll" and
 ">diskpoll.log"
 
 If you want to both see screen output and have a logfile, you might use the
@@ -335,6 +344,7 @@ VI. Contacting the autor
 
 Fidonet: Tobias Ernst @ 2:2476/418
 e-mail:  tobi@bland.fido.de
+www:     http://www.physcip.uni-stuttgart.de/tobi/projects/diskpoll.html
 
 The latest distribution archive of Diskpoll can be obtained by fidonet
 filerequest of the magic "DISKPOLL" at 2:2476/418.
