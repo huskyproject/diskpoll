@@ -1,10 +1,18 @@
 # Makefile for GCC on any UNIX platform
 
 GPP=g++
-CFLAGS=-DNOEXCEPTIONS -Wall -pedantic -DCFGDIR=\"/boot/home/config/etc\"
+#CFLAGS=-DNOEXCEPTIONS -Wall -pedantic -c
+CFLAGS	= -fexceptions -Wall -pedantic -c
+CDEFS	= -DINCS_NEED_DOT_H
+LFLAGS	= -s -Wall
+TARGETOPT= -o
+EXE	=
+
+LIBS	= -lstdc++
+TARGET	= diskpoll$(EXE)
 
 .cc.o:
-	$(GPP) -c $(CFLAGS) $<
+	$(GPP) $(CDEFS) $(CFLAGS) $<
 
 OBJFILES = \
  main.o \
@@ -21,10 +29,12 @@ OBJFILES = \
  prepcfg.o \
  log.o
 
-default: test$(EXE)
+default: $(TARGET)
 
-test$(EXE): $(OBJFILES)
-	$(GPP) $(CFLAGS) -o diskpoll$(EXE) $(OBJFILES) -s
+all:	$(TARGET)
+
+$(TARGET): $(OBJFILES)
+	$(GPP) $(TARGETOPT) $(TARGET) $(OBJFILES) $(LFLAGS) $(LIBS)
 
 clean:
 	-rm *.o
@@ -32,5 +42,4 @@ clean:
 	-rm *~
 
 distclean:
-	-rm diskpoll$(EXE)
-
+	-rm $(TARGET)

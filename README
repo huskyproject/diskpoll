@@ -64,16 +64,16 @@ merge them into my code and release a new version.
 
 III. COMPILING THE SOURCECODE
 
-NOTE:  Diskpoll is distributed in two archives. diskpoll-0.1.3-src.tar.gz
-contains only source code. dpoll013.zip contains binaries for Windows NT,
+NOTE:  Diskpoll is distributed in two archives. diskpoll-0.1.4-src.tar.gz
+contains only source code. diskp014*.zip contains binaries for Windows NT,
 OS/2, DOS and linux (linked against libc.so.6) as well as the source code.
 Note: Diskpoll can also be compiled on BeOS without problems!
 
 The source code is fairly portable between Posix-Systems using the GCC
 compiler.  Non-ANSI-functions called are mainly getopt, opendir, readdir and
 closedir.  To my knowledge, EMX GCC is the only compiler that supports these
-commands on OS/2, and EMX GCC with RSXNT extensions is the only compiler
-that supports them on Windows NT.
+commands on OS/2, EMX GCC with RSXNT extensions or mingw32 (from cygwin
+or standalone) is the only compilers that supports them on Windows NT.
 
 If you are familiar with the Husky build process (using a top-level
 huskymak.cfg), you can use the top-level "Makefile" found in this archive,
@@ -85,17 +85,18 @@ the makefiles found there.  These are standalone makefiles that work
 without any dependence on any Husky package.
 
 You should use "makefile.emo" for OS/2 (it is designed for GNU make,
-found as GNUMAKE.ZIP on ftp.cdrom.com), "makefile.rsx" for Windows
-95/98/NT, "makefile.djg" for DOS and "makefile.unx" for Linux or other Unix
-systems.  "makefile.pgx" is for the egcs 1.0 - derived OS/2
-pentium-optimized pgcc compiler from Andrew Zabolotny.
+found as GNUMAKE.ZIP on ftp.cdrom.com), "makefile.rsx" for Windows 32bit
+(95/98/Me/NT/2000), "makefile.djg" for DOS, "makefile.bsd" is for the
+FreeBSD (also may be used for OpenBSD and NetBSD) and "makefile.unx"
+for Linux or other Unix systems.
+"makefile.pgx" is for the egcs 1.0 - derived OS/2 pentium-optimized pgcc
+compiler, this file written by Andrew Zabolotny.
 
 There is a internal bug in GCC 2.7.2 though, that yields internal compiler
 errors when compiling with exception support.  Hence, the supplied makefiles
 (makefile.os2 for OS/2, makefile for Unix) conatain "-DNOEXCEPTIONS" in the
 CFLAGS variable.  If you have a newer version of GCC, you may replace
-"-DNOEXCEPTIONS" by "-fhandle-exceptions" (or "-fexceptions" if you use
-egcs).
+"-DNOEXCEPTIONS" by "-fhandle-exceptions" ("-fexceptions" on newest GCC).
 
 If you port to another Unix than FreeBSD or Linux, you might have to do some
 adaptions in envdeps.h.
@@ -107,7 +108,7 @@ a) Where the file is searched
 
 Diskpoll reads a config file.  By default, this is "diskpoll.cfg", which is
 expected to be in the current working directory under OS/2, and in
-"/usr/local/etc" under Unix (or in your CFGDIR, if you built with the huskymak.cfg Makefile).  You can use the "-c" command line option to specify a 
+"/usr/local/etc" under Unix (or in your CFGDIR, if you built with the huskymak.cfg Makefile).  You can use the "-c" command line option to specify a
 different config file, e.g. "-c e:\test\test.cfg".
 
 b) What the config file contains and how it looks like
@@ -241,7 +242,7 @@ case, you would use:
   outboundtype binkley \ e:=x:
 
 Now imagine "CLIENT" is a FreeBSD machine which has mounted the Server's
-E-Drive under /var/spool/fido" and the Server's F-Drive (which also might 
+E-Drive under /var/spool/fido" and the Server's F-Drive (which also might
 contain some files to send) under "/mnt/SERVER/f". In this case, you would use:
 
   outboundtype binkley \ e:=/var/spool/fido f:=/mnt/SERVER/f
@@ -308,13 +309,13 @@ normal, direct, crash, or immediate for the uplink will be sent, but those on
 hold will not. If the -r and or -s options are not specified, they default to
 "-s ?" and "-r ?", which means "send and receive anything".
 
-The -d option enables debug mode. You normally only need to use this when you 
+The -d option enables debug mode. You normally only need to use this when you
 reported a problem to me and I instruct you to do so.
 
 The -w option disables use of the file copy API of your operating system
 (currently this is only used on OS/2 and Win32). You may want to try this if
 you experience problems a la "cannot recieve x at y" or "cannot send to x to
-y". See Section VI, for more information. 
+y". See Section VI, for more information.
 
 With <uplink> you specify the name of the system to use as uplink during
 the disk poll.  This must correspond (case-sensitively) to the word in square
@@ -361,14 +362,14 @@ the copy process fails for some other reason.
 
 If the problem is that a binkley outbound references a file that simply does
 not exist any more, diskpoll will simply remove this file from the flow
-files. In this case, the problem will be run when you run diskpoll again. 
+files. In this case, the problem will be run when you run diskpoll again.
 
 But sometimes the problem persists. In this case, perform the following
 checks to diagnose the problem.
 
   - Check if the inbound directories of the system definitions for X and Y
     are correctly written in your config file.
-  
+
   - Look at the filenames F or G. Are they valid filenames *FOR THE SYSTEM
     DISKPOLL IS RUNNING ON*? Perhaps the filename has a drive letter in front
     of it that is correct for the system wher the respective outbound
@@ -379,7 +380,7 @@ checks to diagnose the problem.
   - Run diskpoll with the "-d" option. You can now see exactly what diskpoll
     is trying to do. Again inspect all filenames that occur in the
     logfile. Are they what you expect. If not, then why? (Don't let yourself
-    confuse by forward slashes "/" in the filename on OS/2 or Windows. They 
+    confuse by forward slashes "/" in the filename on OS/2 or Windows. They
     might look strange to you, but they are NOT the problem!).
 
   - If you run OS/2 or Windows, in the "-d" log output, particularly look
@@ -395,7 +396,7 @@ checks to diagnose the problem.
     to be a bug in the OS/2 network code. After upgrading his MPTS to
     WRG8425 (first install MPTS WRx8423, where x is your country code, and
     then install the MPTS fix WRx8425) and his peer network code to LG8412
-    (this is a one step fix), the problem vanished. 
+    (this is a one step fix), the problem vanished.
 
     Even though you can work with diskpoll and the -w switch, you should
     nevertheless perform these updates to make sure your OS/2 is functioning

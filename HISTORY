@@ -3,6 +3,7 @@ Diskpoll 0.1.4, not yet released
    new file is longer renamed to .PK1, but the base name (before the dot) is
    changed. Some tossers did not properly recognise .PK1 files.
  - Adaptions for BeOS (merged from 0.1.3-stable branch)
+ - Change makefiles to using with gcc 2.95.x instead 2.7.x
 
 Diskpoll 0.1.3-stable, forked off for release on 05 Aug 2000
  - Diagnosed a bug in the OS/2 Warp 4 (without mpts/peer fixes) peer/requester

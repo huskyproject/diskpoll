@@ -11,8 +11,11 @@ endif
 
 SRC_DIR=src/
 
-
-CDEFS= -DINCS_NEED_DOT_H -DNOEXCEPTIONS -D$(OSTYPE) $(ADDCDEFS) -Isrc -DCFGDIR=\"$(CFGDIR)\"
+CDEFS= -DINCS_NEED_DOT_H -D$(OSTYPE) $(ADDCDEFS) -Isrc -DCFGDIR=\"$(CFGDIR)\"
+#use this if your GCC is very old
+#CDEFS+= -DNOEXCEPTIONS
+# comment out this if your version gcc not have -fexceptions
+CFLAGS+= -fexceptions
 
 .SUFFIXES:
 .SUFFIXES: .cc .c .o
