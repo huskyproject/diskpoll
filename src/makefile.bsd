@@ -1,0 +1,44 @@
+# Makefile for build DiskPoll on FreeBSD
+# Use BSD make (called make) to build
+
+GPP	= g++
+CFLAGS	= -fexceptions -Wall -pedantic -c
+CDEFS	= -DINCS_NEED_DOT_H -DCFGDIR=\"/usr/local/etc/fido/\"
+LFLAGS	= -s -Wall
+TARGETOPT= -o
+
+LIBS	= -lstdc++
+TARGET	= diskpoll
+
+.cc.o:
+	$(GPP) $(CDEFS) $(CFLAGS) $<
+
+OBJFILES = \
+ main.o \
+ cnode.o \
+ cstring.o \
+ coutb.o \
+ cbinkout.o \
+ findfile.o \
+ copyfile.o \
+ cinbound.o \
+ csystem.o \
+ words.o \
+ csplout.o \
+ prepcfg.o \
+ log.o
+
+default: $(TARGET)
+
+all:	$(TARGET)
+
+$(TARGET): $(OBJFILES)
+	$(GPP) $(TARGETOPT) $(TARGET) $(OBJFILES) $(LFLAGS) $(LIBS)
+
+clean:
+	-rm *.o
+	-rm core
+	-rm *~
+
+distclean:
+	-rm $(TARGET)
