@@ -1,7 +1,7 @@
 #ifndef __ENVDEPS_H
 #define __ENVDEPS_H
 
-#define PROGRAMID "Diskpoll 0.1.3 (dev)"
+#define PROGRAMID "Diskpoll 0.1.3-stable"
 
 // ------- OS/2 or NT with any other compiler except EMX -------
 #if ((defined(__OS2__) || defined(__NT__) || defined(OS2) || defined(NT) || defined(WINNT)) && (!defined(__EMX__)))
