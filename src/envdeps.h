@@ -20,7 +20,10 @@
 #define DEFDIRSEP '\\'
 #define DEFCONFIGFILE "./diskpoll.cfg"
 #define ALLFILES "*"
+#include <stdlib.h> /* mkdir */
+#define mymkdir(a) mkdir((a), 0)
 #endif
+
 
 // ------- These settings are for DOS/DPMI with DJGPP v2  -------
 #elif defined __DJGPP__
@@ -30,6 +33,8 @@
 #define DEFDIRSEP '\\'
 #define DEFCONFIGFILE "./diskpoll.cfg"
 #define ALLFILES "*"
+#include <sys/stat.h> /* mkdir */
+#define mymkdir(a) mkdir((a), 0)
 
 // ------- DOS with any other compiler ------- 
 #elif defined __DOS__
@@ -37,7 +42,7 @@
 
 // ------- These settings are for Unix (FreeBSD, AIX, Linux, ...) -------
 #else 
-#define FNM_FLAGS 0
+#define FNM_FLAGS FNM_CASEFOLD
 #ifdef  HAVE_VSNPRINTF
 #define VSNPRINTF(a,b,c,d) vsnprintf(a,b,c,d)
 #else
@@ -49,6 +54,13 @@
 #define DEFCONFIGFILE "/usr/local/etc/diskpoll.cfg"
 #define ALLFILES "*"
 #endif
+#include <sys/stat.h> /* for mkdir */
+#if defined(__FreeBSD__) || defined(_AIX)
+#define mymkdir(a) mkdir((a), 0)
+#else
+#define mymkdir(a) __mkdir((a), 0)
+#endif
+
 
 
 #endif

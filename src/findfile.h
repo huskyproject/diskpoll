@@ -5,6 +5,7 @@
 #include "cstring.h"
 
 CArray<CString>* findfile(const CString& mask);
+int adaptcase(char *);
 
 #endif
 

@@ -33,25 +33,91 @@ CArray<CString>* findfile(const CString& mask)
   else
     strMask="*";
 
-  DIR *hDir=opendir(strDir);
-
-  strDir+=DEFDIRSEP;
-
-  if (hDir==NULL)
-    return NULL;
-
   struct dirent* dirent;
-  CArray<CString> *pArray=new CArray<CString>;
-
-  while ((dirent=readdir(hDir))!=NULL)
+  CArray<CString> *dirs;
+ 
+  if (strDir.Length()>=2 || (strDir.Length() == 1 && strDir.charAt(0) != '.'))
     {
-      if (!fnmatch(strMask,dirent->d_name,FNM_FLAGS))
-        {
-          CString s(strDir);
-          s+=dirent->d_name;
-          pArray->Add(s);
-        }
+      // if we have a non-trivial directory name - SEARCH IT!
+      // this is slow, but the only way to get around case sensitivity
+      // problems on unix boxes that mount dos ressources ...
+
+      dirs = findfile(strDir);
+    }
+  else
+    {
+      dirs = new CArray<CString>;
+      dirs->Add(strDir);
     }
 
+  if (dirs == NULL)
+    return NULL;
+
+  CArray<CString> *pArray=new CArray<CString>;
+
+  for (unsigned long ndir = 0; ndir < dirs->Size(); ndir++)
+    {
+      DIR *hDir;
+      if ((*dirs)[ndir].Length())
+        hDir=opendir((*dirs)[ndir]);
+      else
+        {
+          CString s;
+          s+=DEFDIRSEP;
+          hDir=opendir(s);
+        }
+
+      if (hDir==NULL)
+        continue;
+
+      while ((dirent=readdir(hDir))!=NULL)
+        {
+          if (!fnmatch(strMask,dirent->d_name,FNM_FLAGS))
+            {
+              CString s((*dirs)[ndir]);
+              s+=DEFDIRSEP;
+              s+=dirent->d_name;
+              pArray->Add(s);
+            }
+        }
+      closedir(hDir);
+    }
+  delete dirs;
   return pArray;
 }
+
+int adaptcase(char *fn)
+{
+  CArray<CString> *files = findfile(fn);
+  unsigned long l = 0;
+
+  if (files == NULL || files->Size() == 0)
+    {
+      if (files) delete files;
+      return 0;
+    }
+
+  if (files->Size()>1)
+    {
+      for (l = 0; l<files->Size(); l++)
+        {
+          if (!strcmp((*files)[l],fn))
+            {
+              break;
+            }
+        }
+      if (l==files->Size())
+        {
+          l = 0;
+        }
+    }
+  //  cerr << (*files)[l] << " " << fn << "\n";
+  CheckCond((strlen((*files)[l]) == strlen(fn)),
+            "adaptcase used with wildcards");
+  strcpy(fn, (*files)[l]);
+  return 1;
+}
+      
+
+             
+  

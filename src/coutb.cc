@@ -1,4 +1,5 @@
 #include "coutb.h"
+#include "findfile.h"
 
 CSendFile::CSendFile():strFilename()
 {
@@ -70,6 +71,7 @@ void COutbound::_stripSlash()
         strBasepath+=CString(".");
       str=((const char *)(strBasepath));
       strBasepath=str;
+      adaptcase(strBasepath);
     }
 }
 

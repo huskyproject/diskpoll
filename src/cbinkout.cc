@@ -44,7 +44,7 @@ CString CBinkleyOutbound::_flowfileExtension(int flavour)
 
 CString CBinkleyOutbound::_nodebaseName(const CNode& n)
 {
-  strstream sext;
+  strstream sext, sext2, sext3;
   char *cpext;
 
   sext.fill('0');
@@ -55,16 +55,37 @@ CString CBinkleyOutbound::_nodebaseName(const CNode& n)
       sext.width(3);
       sext << n.Zone();
     }
-  sext << '/';
-  sext.fill('0');
-  sext.width(4);  sext << n.Net();
-  sext.width(4);  sext << n.Node();
+  sext << '\0';
+  if (!adaptcase(sext.str()))
+    {
+      mymkdir(sext.str());
+    }
+  sext2 << hex;
+  sext2 << sext.str();
+  sext2 << '/';
+  sext2.fill('0');
+  sext2.width(4);  sext2 << n.Net();
+  sext2.width(4);  sext2 << n.Node();
   if (n.Point()!=0)
     {
-      sext << ".pnt/"; sext.width(8);  sext << n.Point();
+      sext2 << ".pnt" << '\0'; 
+      if (!adaptcase(sext2.str()))
+        {
+          mymkdir(sext2.str());
+        }
+      sext3 << hex;
+      sext3 << sext2.str();
+      sext3.fill('0');
+      sext3 << "/";
+      sext3.width(8);  sext3 << n.Point();
     }
-  sext << '\0';
-  cpext=sext.str();
+  else
+    {
+      sext2 << '\0';
+      sext3 << sext2.str();
+    }
+  sext3 << '\0';
+  cpext=sext3.str();
   CString s(cpext);
   delete cpext;
 
@@ -293,14 +314,8 @@ CBinkleyOutbound::~CBinkleyOutbound()
 
 static int fileExists(const CString& cpFilename)
 {
-  ifstream f(cpFilename);
-  if (f)
-    {
-      f.close();
-      return 1;
-    }
-  else
-    return 0;
+  CString s = cpFilename;
+  return adaptcase(s);
 }
 
 static int makeFile(const CString& cpFilename)
@@ -317,7 +332,7 @@ static int makeFile(const CString& cpFilename)
 
 int CBinkleyOutbound::lockNode(const CNode& node)
 {
-  CString cpBusyfile=_nodebaseName(node)+".BSY";
+  CString cpBusyfile=_nodebaseName(node)+".bsy";
   if (fileExists(cpBusyfile))
     return 0;
   else
@@ -326,7 +341,7 @@ int CBinkleyOutbound::lockNode(const CNode& node)
 
 void CBinkleyOutbound::unlockNode(const CNode& node)
 {
-  remove(_nodebaseName(node)+".BSY");
+  remove(_nodebaseName(node)+".bsy");
 }
 
 CString CBinkleyOutbound::importFilenameFromFlowfile(const CString& flowName)
