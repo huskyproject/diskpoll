@@ -1,4 +1,6 @@
 Diskpoll 0.1.3, not yet released
+ - Fix: Diskpoll forgot to poll mail for some AKAs if the downlink did not
+   have the same number of akas as the uplink.
  - Fixed a serious bug. Diskpoll was not releasing file search handles, which
    could lead to diskpoll not "seeing" some files in the outbound. This did
    only occur on very large outbound directories. You should upgrade anyway!
