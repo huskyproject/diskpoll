@@ -3,6 +3,7 @@
 #include <fstream.h>
 #include "copyfile.h"
 #include <ctype.h>
+#include "log.h"
 
 void CInbound::makevalidpath()
 {
@@ -89,12 +90,25 @@ int CInbound::Receive(const CString& strFilename, int killflag)
   if (index<strFilename.Length()||strFilename.Length()==0)
     strName=strFilename.substr(index,strFilename.Length()-1);
   else
-    return 0;                   // file not found ...
+    {
+      logmsg(LOGDBG, "CInbound::Receive: error interpreting file name for %s",
+                      (const char *)strFilename);
+      return 0;                   // file not found ...
+    }
 
   strDestname=makeNewFilename(strPath+strName);
   if (!strDestname.Length())
-    return 0;                   // no name for destination file could be found
+    {
+      logmsg(LOGDBG, "CInbound::Receive: error creating destination "
+                     "file name for %s plus %s",
+                     (const char *)strPath, (const char *)strName);
+      return 0;           // name for destination file could not be found
+    }
+
   crc = copyfile(strDestname,strFilename);
+  logmsg(LOGDBG, "CInbound::Receive: Return code of copyfile is %d",
+         (int) crc);
+
   switch(crc)
     {
     case COPY_NOERR:

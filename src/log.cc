@@ -5,6 +5,8 @@
 #include <iostream.h>
 #include <time.h>
 
+int debug_mode = 0;
+
 void logmsg(char type, char *cpformat, ...)
 {
   static char buffer[2048];
@@ -14,6 +16,8 @@ void logmsg(char type, char *cpformat, ...)
   char cpTime[64];
   static char *cpMonths[]={"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
                            "Aug", "Sep", "Oct", "Nov", "Dec", "???"};
+
+  if (type == LOGDBG && !debug_mode) return;
 
   sprintf(cpTime,"%02i %3s %02i:%02i:%02i DISK",
           tm->tm_mday, cpMonths[tm->tm_mon], tm->tm_hour, tm->tm_min,

@@ -129,7 +129,7 @@ int main(int argc, char **argv)
   int sendFlavour = -1, receiveFlavour = -1;
 
   optind=1; opterr=0;
-  while ((i=getopt(argc,argv,"s:r:c:h"))!=-1)
+  while ((i=getopt(argc,argv,"s:r:c:hd"))!=-1)
     {
       switch (i)
         {
@@ -138,6 +138,9 @@ int main(int argc, char **argv)
         case 'h':
           help=1;
           break;
+        case 'd':
+          debug_mode = 1;
+          break;          
         case 's':
         case 'r':
           int flav; char *cp;
@@ -196,11 +199,12 @@ int main(int argc, char **argv)
   if (help)
     {
       cerr << PROGRAMID << "\n" <<
-        "Usage: diskpoll [-c configfile] [-s flav] [-r flav] [uplink] [downlink]\n" <<
+        "Usage: diskpoll [-d] [-c configfile] [-s flav] [-r flav] [uplink] [downlink]\n" <<
         "          configfile: defaults to ./diskpoll.cfg\n" <<
         "          flav:       defaults to \"?\" (all flavours)\n"<<
         "          uplink:     defaults to \"Uplink\"\n" <<
-        "          downlink:   defaults to \"Downlink\"\n";
+        "          downlink:   defaults to \"Downlink\"\n" <<
+        "          -d          means \"enable debug mode\"\n";
     }
   else
     {
@@ -210,8 +214,3 @@ int main(int argc, char **argv)
       logmsg(LOGMSG,"End: %s",PROGRAMID);
     }
 }
-
-
-
-
-

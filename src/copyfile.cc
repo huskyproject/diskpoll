@@ -1,5 +1,6 @@
 #include "copyfile.h"
 #include "envdeps.h"
+#include "log.h"
 #if defined(__OS2__)
 #define INCL_DOSFILEMGR
 #define INCL_DOSERRORS
@@ -28,6 +29,7 @@ int copyfile(const char *cpDest, const char *cpSource)
   FILEFINDBUF3 FindBuffer;
   ULONG FindCount;
   
+  logmsg(LOGDBG, "copyfile: using OS/2 API routines");
       
   FindHandle = HDIR_CREATE; FindCount = 1;
   rc = DosFindFirst((PSZ)cpSource, &FindHandle,
@@ -39,6 +41,8 @@ int copyfile(const char *cpDest, const char *cpSource)
                     FIL_STANDARD);
   DosFindClose(FindHandle);
 
+  logmsg(LOGDBG, "copyfile: DosFindFirst return code is %d", (int)rc);
+
   switch(rc)
     {
     case ERROR_NO_MORE_FILES: return COPY_NOTEXIST;
@@ -47,6 +51,8 @@ int copyfile(const char *cpDest, const char *cpSource)
     }
     
   rc = DosCopy((PSZ)cpSource,(PSZ)cpDest,DCPY_EXISTING);
+
+  logmsg(LOGDBG, "copyfile: DosCopy return code is %d", (int)rc);
 
   switch (rc)
     {
@@ -58,6 +64,8 @@ int copyfile(const char *cpDest, const char *cpSource)
 #elif defined(__NT__)
 
   DWORD rv;
+
+  logmsg(LOGDBG, "copyfile: using Win32 API routines");
   
   if (CopyFile((LPCTSTR)cpSource,(LPCTSTR)cpDest,FALSE)==TRUE)
     {
@@ -66,6 +74,7 @@ int copyfile(const char *cpDest, const char *cpSource)
   else
     {
       rv = GetLastError();
+      logmsg(LOGDBG, "copyfile: CopyFile last error is %d", (int) rv);
       if (rv == ERROR_FILE_NOT_FOUND)
         return COPY_NOTEXIST;
       else
@@ -76,12 +85,20 @@ int copyfile(const char *cpDest, const char *cpSource)
   static unsigned char *cpBuf=new unsigned char[BUFLEN];
   int retval=COPY_NOERR;
 
+  logmsg(LOGDBG, "copyfile: using built-in routines");
+
   ofstream fo(cpDest,ios::bin|ios::out);
-  if (!fo) return COPY_OTHER;
+  if (!fo)
+    {
+      logmsg(LOGDBG, "copyfile: failed to create output stream");
+      return COPY_OTHER;
+    }
 
   ifstream fi(cpSource,ios::bin|ios::in);
   if (!fi) 
-    { 
+    {
+      logmsg(LOGDBG, "copyfile: failed to open input stream");
+      
       fo.close();
       remove(cpDest);
 
@@ -93,6 +110,7 @@ int copyfile(const char *cpDest, const char *cpSource)
           if (pTemp->Size() == 0)
             {
               delete pTemp;
+              logmsg(LOGDBG, "copyfile: source file had zero length");
               return COPY_NOTEXIST;
             }
           delete pTemp;
@@ -109,6 +127,7 @@ int copyfile(const char *cpDest, const char *cpSource)
         fo.write(cpBuf,gc);
       if (!fo)
         {
+          logmsg(LOGDBG, "copyfile: problem when writing output");
           retval=COPY_OTHER;
           break;
         }
@@ -117,7 +136,10 @@ int copyfile(const char *cpDest, const char *cpSource)
   fi.close();
   fo.close();
   if (retval != COPY_NOERR)                  // failure
-    remove(cpDest);
+    {
+      logmsg(LOGDBG, "copyfile: some sort of problem, removing destination");
+      remove(cpDest);
+    }
   return retval;
 #endif
 }

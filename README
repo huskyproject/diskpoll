@@ -294,9 +294,12 @@ V. INVOKING DISKPOLL
 
 a) Syntax
 
-   diskpoll [-c <config-file>] [-r <flav>] [-s <flav>] [<uplink>] [<downlink]
+   diskpoll [-d] [-c <config>] [-r <flav>] [-s <flav>] [<uplink>] [<downlink]
 
-With -c<config-file>, you can specify the configuration file to use.  If
+The -d option enables debug mode. You normally only need to use this when you 
+reported a problem to me and I instruct you to do so.
+
+With -c<config>, you can specify the configuration file to use.  If
 omitted, the default is ".\diskpoll.cfg" for OS/2, NT and DOS, or
 "/usr/local/etc/diskpoll.cfg" for Unix.
 
