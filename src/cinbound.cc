@@ -34,8 +34,6 @@ static CString makeNewFilename(const CString& strName)
   length = str.Length();
   replace_pos = length - 1;
 
-  logmsg(LOGDBG, "%s %d\n", (const char *)str, length);
-
   /* Rename ?UT-Packets to .PKT */
   if (length > 4)
     {

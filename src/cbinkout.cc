@@ -10,6 +10,7 @@
 #include <fstream.h>
 #include <stdio.h>              // unlink
 #include <ctype.h>
+#include "log.h"
 
 
 CString CBinkleyOutbound::_packetExtension (int flavour)
@@ -233,10 +234,25 @@ int CBinkleyOutbound::removeFilesFor(const CNode& n, CArray<CSendFile>* pFiles)
   unsigned long i,j;
   int cr,flavour;
 
+  logmsg(LOGDBG, "CBinkleyOutbound::removeFilesFor");
+
   pOrg=getFilesFor(n);
+
+  logmsg(LOGDBG, "dumping list of files that are currently on hold");
+  for (i = 0; i < pOrg->Size(); i++)
+    {
+      logmsg(LOGDBG," %s", (const char *)(*pOrg)[i].Filename());
+    }
+
+  logmsg(LOGDBG, "dumping list of files schedule for removal from flow files");
+  for (i = 0; i < pFiles->Size(); i++)
+    {
+      logmsg(LOGDBG," %s", (const char *)(*pFiles)[i].Filename());
+    }
 
   pOrg->Sort(fncomparator);
   pFiles->Sort(fncomparator);
+
 
   i=j=0; cr=0;
 
@@ -272,6 +288,14 @@ int CBinkleyOutbound::removeFilesFor(const CNode& n, CArray<CSendFile>* pFiles)
    {
      remove(_flowfileName(n,flavour));
    }
+
+
+  logmsg(LOGDBG, "dumping new list of files on hold");
+  for (i = 0; i < pNew->Size(); i++)
+    {
+      logmsg(LOGDBG," %s", (const char *)(*pNew)[i].Filename());
+    }
+
 
   i=sendFilesTo(n,pNew);          // rebuild the flow files
 

@@ -66,7 +66,7 @@ int copyfile(const char *cpDest, const char *cpSource)
           if (pTemp->Size() == 0)
             {
               delete pTemp;
-              logmsg(LOGDBG, "copyfile: source file had zero length");
+              logmsg(LOGDBG, "copyfile: source file did not exist or had zero length");
               return COPY_NOTEXIST;
             }
           delete pTemp;
