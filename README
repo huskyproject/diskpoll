@@ -65,8 +65,8 @@ merge them into my code and release a new version.
 III. COMPILING THE SOURCECODE
 
 NOTE:  OS/2 users will find a precomplied standalone executable in .\bin\os2,
-so they may skip reading this paragraph. The same applies for Windows NT and
-DOS users.
+so they may skip reading this paragraph. The same applies for Windows NT,
+BeOS and DOS users.
 
 The source code is fairly portable between Posix-Systems using the GCC
 compiler.  Non-ANSI-functions called are mainly getopt, opendir, readdir and
@@ -299,7 +299,7 @@ diskpoll [-c <config>] [-r <flav>] [-s <flav>] [-d] [-w] [<uplink>] [<downlink]
 
 With -c<config>, you can specify the configuration file to use.  If
 omitted, the default is ".\diskpoll.cfg" for OS/2, NT and DOS, or
-"/usr/local/etc/diskpoll.cfg" for Unix.
+"/usr/local/etc/diskpoll.cfg" for Unix, and "/boot/home/config/etc" for BeOS.
 
 With -r <flav> and -s <flav> you can restrict the flavours to receive from or
 send to the uplink. I.E. if you specify "-s ndci", all files that you have on
