@@ -4,13 +4,13 @@
 #define PROGRAMID "Diskpoll 0.1.3 (dev)"
 
 // ------- OS/2 or NT with any other compiler except EMX -------
-#if ((defined(__OS2__) || defined(__NT__)) && (!defined(__EMX__)))
-#error "EMX GCC required under OS/2"
+#if ((defined(__OS2__) || defined(__NT__) || defined(OS2) || defined(NT) || defined(WINNT)) && (!defined(__EMX__)))
+#error "EMX GCC required under OS/2, RSX required unter NT"
 
 
 // ------- EMX settings for OS/2 or NT -------
 #elif (defined(__EMX__))
-#if (!defined(__OS2__)) && (!defined(__NT__))
+#if (!defined(__OS2__)) && (!defined(__NT__)) && (!defined(OS2)) && (!defined(NT)) && (!defined(WINNT))
 #error "Only OS/2 or NT platforms supported for EMX gcc"
 #else
 #define VSNPRINTF(a,b,c,d) vsnprintf(a,b,c,d)    // emx as vsnprintf!
@@ -35,7 +35,7 @@
 #define mymkdir(a) mkdir((a), 0)
 
 // ------- DOS with any other compiler -------
-#elif defined __DOS__
+#elif defined(__DOS__) || defined(DOS)
 #error "The DOS version requires DJGPP as compiler!"
 
 // ------- These settings are for Unix (FreeBSD, AIX, Linux, ...) -------
@@ -49,12 +49,15 @@
 #if !defined(__FreeBSD__) && !defined(__NetBSD__)
 #define NEED_GETOPTH
 #endif
-#ifdef __NetBSD__
+#if defined(__NetBSD__) || defined(__FreeBSD__)
 #define NEED_UNISTDH
 #endif
 //#define SHORTINCLUDEFILENAMES
 #define DEFDIRSEP '/'
-#define DEFCONFIGFILE "/usr/local/etc/diskpoll.cfg"
+#ifndef CFGDIR
+#define CFGDIR "/usr/local/etc"
+#endif
+#define DEFCONFIGFILE CFGDIR"/diskpoll.cfg"
 #define ALLFILES "*"
 #include <sys/stat.h> /* for mkdir */
 #if defined(__NetBSD__) || defined(__FreeBSD__) || defined(_AIX) || defined(__osf__) || defined(__GLIBC__)
