@@ -7,7 +7,8 @@ II.  Important Remarks
 III. Compiling the Sourcecode
 IV.  The Diskpoll Config File
 V.   Invoking Diskpoll
-VI.  Contacting the Author
+VI.  Troubleshootig / FAQ's
+VII. Contacting the Author
 
 
 I. WHAT DOES DISKPOLL DO?
@@ -82,7 +83,7 @@ If you aren't, you should change to the "src" subdirectory and use one of
 the makefiles found there.  These are standalone makefiles that work
 without any dependence on any Husky package.
 
-You should use "makefile.emx" for OS/2 (it is designed for GNU make,
+You should use "makefile.emo" for OS/2 (it is designed for GNU make,
 found as GNUMAKE.ZIP on ftp.cdrom.com), "makefile.rsx" for Windows
 95/98/NT, "makefile.djg" for DOS and "makefile.unx" for Linux or other Unix
 systems.  "makefile.pgx" is for the egcs 1.0 - derived OS/2
@@ -105,8 +106,8 @@ a) Where the file is searched
 
 Diskpoll reads a config file.  By default, this is "diskpoll.cfg", which is
 expected to be in the current working directory under OS/2, and in
-"/usr/local/etc" under Unix.  You can use the "-c" command line option to
-specify a different config file, e.g. "-c e:\test\test.cfg".
+"/usr/local/etc" under Unix (or in your CFGDIR, if you built with the huskymak.cfg Makefile).  You can use the "-c" command line option to specify a 
+different config file, e.g. "-c e:\test\test.cfg".
 
 b) What the config file contains and how it looks like
 
@@ -155,8 +156,8 @@ c) Description of the configuration keywords.
      A "Trivial" outbound does not take any options.  A "Binkley" outbound does
      not require any options as well as long as Diskpoll runs on the same
      machine where the Binkley outbound resides.  If Diskpoll runs on a
-     differnt machine, please see below (IV.d) for a description of the options
-     required.
+     different machine (i.e. if a LAN is involved), please see below (IV.d)
+     for a description of the network-related options that are required.
 
    Outboundbase <directory>
 
@@ -239,8 +240,8 @@ case, you would use:
   outboundtype binkley \ e:=x:
 
 Now imagine "CLIENT" is a FreeBSD machine which has mounted the Server's
-E-Drive under /var/spool/fido" and the Server's F-Drive (which also might contain
-some files to send) under "/mnt/SERVER/f". In this case, you would use:
+E-Drive under /var/spool/fido" and the Server's F-Drive (which also might 
+contain some files to send) under "/mnt/SERVER/f". In this case, you would use:
 
   outboundtype binkley \ e:=/var/spool/fido f:=/mnt/SERVER/f
 
@@ -294,10 +295,7 @@ V. INVOKING DISKPOLL
 
 a) Syntax
 
-   diskpoll [-d] [-c <config>] [-r <flav>] [-s <flav>] [<uplink>] [<downlink]
-
-The -d option enables debug mode. You normally only need to use this when you 
-reported a problem to me and I instruct you to do so.
+diskpoll [-c <config>] [-r <flav>] [-s <flav>] [-d] [-w] [<uplink>] [<downlink]
 
 With -c<config>, you can specify the configuration file to use.  If
 omitted, the default is ".\diskpoll.cfg" for OS/2, NT and DOS, or
@@ -308,6 +306,14 @@ send to the uplink. I.E. if you specify "-s ndci", all files that you have on
 normal, direct, crash, or immediate for the uplink will be sent, but those on
 hold will not. If the -r and or -s options are not specified, they default to
 "-s ?" and "-r ?", which means "send and receive anything".
+
+The -d option enables debug mode. You normally only need to use this when you 
+reported a problem to me and I instruct you to do so.
+
+The -w option disables use of the file copy API of your operating system
+(currently this is only used on OS/2 and Win32). You may want to try this if
+you experience problems a la "cannot recieve x at y" or "cannot send to x to
+y". See Section VI, for more information. 
 
 With <uplink> you specify the name of the system to use as uplink during
 the disk poll.  This must correspond (case-sensitively) to the word in square
@@ -343,7 +349,61 @@ the Unix version). The NT version also uses a special Windows API for file
 copying, but I have not bothered to examing if it really is faster.
 
 
-VI. Contacting the autor
+VI. TROUBLESHOOTING / FAQ'
+
+a) "Could not receive F at X" / "Could not send G to Y" - What is the problem?
+
+This means that diskpoll cannot copy a file from or to a system, because
+either the source file F (or G) does not exist, or because the desitination
+directory (inbound of X or Y) does not exist or cannot be written to, or that
+the copy process fails for some other reason.
+
+If the problem is that a binkley outbound references a file that simply does
+not exist any more, diskpoll will simply remove this file from the flow
+files. In this case, the problem will be run when you run diskpoll again. 
+
+But sometimes the problem persists. In this case, perform the following
+checks to diagnose the problem.
+
+  - Check if the inbound directories of the system definitions for X and Y
+    are correctly written in your config file.
+  
+  - Look at the filenames F or G. Are they valid filenames *FOR THE SYSTEM
+    DISKPOLL IS RUNNING ON*? Perhaps the filename has a drive letter in front
+    of it that is correct for the system wher the respective outbound
+    directory is stored on, but perhaps it is not correct for the system on
+    which diskpoll is running? If this is the case, you can use diskpoll's
+    drive remapping feature. See section IV.d) for information on this.
+
+  - Run diskpoll with the "-d" option. You can now see exactly what diskpoll
+    is trying to do. Again inspect all filenames that occur in the
+    logfile. Are they what you expect. If not, then why? (Don't let yourself
+    confuse by forward slashes "/" in the filename on OS/2 or Windows. They 
+    might look strange to you, but they are NOT the problem!).
+
+  - If you run OS/2 or Windows, in the "-d" log output, particularly look
+    for the call to DosCopyFile (OS/2) resp. CopyFile (Win32, the one with
+    capital C and capital F). Do they give non-zero return codes? If they
+    do, you might try to run diskpoll with the "-w" flag. If this helps,
+    and you use OS/2, read below.
+
+  - One OS/2 Warp 4 user reported the following problem: He saw a return
+    code of 5 from DosCopyFile. However, when using the "-w" option, every-
+    thing worked. The user was running diskpoll on OS/2, but working with a
+    Binkley outbound that was stored on a Win98 SE machine. This turned out
+    to be a bug in the OS/2 network code. After upgrading his MPTS to
+    WRG8425 (first install MPTS WRx8423, where x is your country code, and
+    then install the MPTS fix WRx8425) and his peer network code to LG8412
+    (this is a one step fix), the problem vanished. 
+
+    Even though you can work with diskpoll and the -w switch, you should
+    nevertheless perform these updates to make sure your OS/2 is functioning
+    correctly in other circumstances. If you use Warp 3 Connect, you can also
+    upgrade to WRx8425, but for the peer code, you need Lx8196 instead of
+    Lx8412.
+
+
+VII. CONTACTING THE AUTHOR
 
 Fidonet: Tobias Ernst @ 2:2476/418
 e-mail:  tobi@bland.fido.de

@@ -182,6 +182,9 @@ void CSystem::poll(CSystem& uplink, int sendFlavour, int receiveFlavour)
                                    LOGNODE((*pAkas)[i]));
                   if (recerr == RECERR_NOTEXIST)
                     {
+                      logmsg(LOGDBG,
+                         "Will remove non-existant file %s from flow file.",
+                         (const char*)(*pFiles)[j].Filename());
                       receivedFiles.Add((*pFiles)[j]);
                     }
                 }

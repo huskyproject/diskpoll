@@ -1,4 +1,6 @@
 Diskpoll 0.1.3, not yet released
+ - Diagnosed a bug in the OS/2 Warp 4 (without mpts/peer fixes) peer/requester
+   code and provided a workound option "-w" for it. See README for more info.
  - New "-d" option to give me additional information when users report
    problems.
  - New keyword MailFlag for a system definition. It's parameter is a file 

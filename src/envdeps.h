@@ -28,7 +28,9 @@ extern int optopt;
 
 //#define SHORTINCLUDEFILENAMES  // use strstrea.h, not strstream.h
 #define DEFDIRSEP '\\'
-#define DEFCONFIGFILE "./diskpoll.cfg"
+#ifndef CFGDIR
+#define CFGDIR "."
+#endif
 #define ALLFILES "*"
 #include <stdlib.h> /* mkdir */
 #define mymkdir(a) mkdir((a), 0)
@@ -40,7 +42,9 @@ extern int optopt;
 #define VSNPRINTF(a,b,c,d) vsprintf(a,c,d)
 #define NEED_UNISTDH
 #define DEFDIRSEP '\\'
-#define DEFCONFIGFILE "./diskpoll.cfg"
+#ifndef CFGDIR
+#define CFGDIR "."
+#endif
 #define ALLFILES "*"
 #include <sys/stat.h> /* mkdir */
 #define mymkdir(a) mkdir((a), 0)
@@ -68,7 +72,6 @@ extern int optopt;
 #ifndef CFGDIR
 #define CFGDIR "/usr/local/etc"
 #endif
-#define DEFCONFIGFILE CFGDIR"/diskpoll.cfg"
 #define ALLFILES "*"
 #include <sys/stat.h> /* for mkdir */
 #if defined(__NetBSD__) || defined(__FreeBSD__) || defined(_AIX) || defined(__osf__) || defined(__GLIBC__)
@@ -78,6 +81,7 @@ extern int optopt;
 #endif
 #endif
 
+#define DEFCONFIGFILE CFGDIR"/diskpoll.cfg"
 
 #endif
 

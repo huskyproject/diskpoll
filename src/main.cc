@@ -7,6 +7,7 @@
 #include "prepcfg.h"
 #include "carray.h"
 #include "envdeps.h"
+#include "copyfile.h"
 #ifdef NEED_GETOPTH
 #include <getopt.h>
 #endif
@@ -129,7 +130,7 @@ int main(int argc, char **argv)
   int sendFlavour = -1, receiveFlavour = -1;
 
   optind=1; opterr=0;
-  while ((i=getopt(argc,argv,"s:r:c:hd"))!=-1)
+  while ((i=getopt(argc,argv,"s:r:c:hdw"))!=-1)
     {
       switch (i)
         {
@@ -140,7 +141,10 @@ int main(int argc, char **argv)
           break;
         case 'd':
           debug_mode = 1;
-          break;          
+          break;
+        case 'w':
+          copyfile_no_api = 1;
+          break;
         case 's':
         case 'r':
           int flav; char *cp;
@@ -199,12 +203,21 @@ int main(int argc, char **argv)
   if (help)
     {
       cerr << PROGRAMID << "\n" <<
-        "Usage: diskpoll [-d] [-c configfile] [-s flav] [-r flav] [uplink] [downlink]\n" <<
-        "          configfile: defaults to ./diskpoll.cfg\n" <<
+        "Usage: diskpoll [-c config] [-s flav] [-r flav] [-d] " <<
+#if defined(__OS2__) || defined(__NT__)
+        "[-w] " <<
+#endif
+        "[uplink] [downlink]\n" <<
+        "          config:     config file name, default: " << DEFCONFIGFILE << "\n" <<
         "          flav:       defaults to \"?\" (all flavours)\n"<<
         "          uplink:     defaults to \"Uplink\"\n" <<
         "          downlink:   defaults to \"Downlink\"\n" <<
-        "          -d          means \"enable debug mode\"\n";
+        "          -d          means \"enable debug mode\"\n"
+#if defined(__OS2__) || defined(__NT__)
+        << "          -w          enable workaround for broken operating system copy API\n"
+#endif
+        ;
+            
     }
   else
     {
