@@ -1,0 +1,42 @@
+# Makefile for Andrew Zabolotny's egcs based OS/2 pgcc compiler
+# -Zomf won't work here, but in contrast to plain emx, exceptions
+# will work.
+
+GPP=gcc
+CFLAGS=-D__OS2__ -O6 -Zcrtdll -Wall -pedantic -fexceptions
+EXE=.exe
+OBJ=.o
+
+%$(OBJ) : %.cc
+	 $(GPP) -c $(CFLAGS) $<
+
+OFILES = \
+ main$(OBJ) \
+ cnode$(OBJ) \
+ cstring$(OBJ) \
+ coutb$(OBJ) \
+ cbinkout$(OBJ) \
+ findfile$(OBJ) \
+ copyfile$(OBJ) \
+ cinbound$(OBJ) \
+ csystem$(OBJ) \
+ words$(OBJ) \
+ csplout$(OBJ) \
+ prepcfg$(OBJ) \
+ log$(OBJ) \
+ pgccfix$(OBJ)
+
+default: diskpoll$(EXE)
+
+diskpoll$(EXE): $(OFILES)
+	$(GPP) $(CFLAGS) -o diskpoll$(EXE) $(OFILES) -lstdcpp -lgcc -s
+
+clean:
+	-cmd /c del *.o
+	-cmd /c del *.obj
+	-cmd /c del core
+	-cmd /c del *~
+
+distclean: clean
+	-cmd /c del diskpoll$(EXE)
+
