@@ -1,0 +1,47 @@
+# include Husky-Makefile-Config
+include ../../huskymak.cfg
+
+ifeq ($(DEBUG), 1)
+  CFLAGS=-DNOEXCEPTIONS -Wall -pedantic -O3 -g
+else
+  CFLAGS=-DNOEXCEPTIONS -Wall -pedantic -O3 -s
+endif
+
+CDEFS=$(ADDCDEFS)
+
+.cc$(OBJ):
+	$(GPP) -c $(CFLAGS) $(CDEFS) $<
+
+OBJFILES = \
+ main$(OBJ) \
+ cnode$(OBJ) \
+ cstring$(OBJ) \
+ coutb$(OBJ) \
+ cbinkout$(OBJ) \
+ findfile$(OBJ) \
+ copyfile$(OBJ) \
+ cinbound$(OBJ) \
+ csystem$(OBJ) \
+ words$(OBJ) \
+ csplout$(OBJ) \
+ prepcfg$(OBJ) \
+ log$(OBJ)
+
+default: diskpoll
+
+all: diskpoll
+
+diskpoll: $(OBJFILES)
+	$(GPP) $(CFLAGS) $(CDEFS) -o diskpoll $(OBJFILES)
+
+install:
+	install $(IBOPT) diskpoll $(BINDIR)
+
+clean:
+	-rm *.o
+	-rm core
+	-rm *~
+
+distclean: clean
+	-rm diskpoll$(EXE)
+
