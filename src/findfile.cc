@@ -2,7 +2,7 @@
 #include "envdeps.h"
 
 #include <sys/types.h>
-#include <dirent.h>             
+#include <dirent.h>
 #include <fnmatch.h>
 
 CArray<CString>* findfile(const CString& mask)
@@ -23,7 +23,7 @@ CArray<CString>* findfile(const CString& mask)
       if (strDir.charAt(index-1)==':')
         strDir+=".";
       else
-        if (index>=2) 
+        if (index>=2)
           strDir=mask.substr(0,index-2);
         else
           strDir="";
@@ -35,8 +35,10 @@ CArray<CString>* findfile(const CString& mask)
 
   struct dirent* dirent;
   CArray<CString> *dirs;
- 
-  if (strDir.Length()>=2 || (strDir.Length() == 1 && strDir.charAt(0) != '.'))
+
+  if (strDir.Length()>2 ||
+      (strDir.Length() == 2 && strDir.charAt(1) != ':') ||
+      (strDir.Length() == 1 && strDir.charAt(0) != '.'))
     {
       // if we have a non-trivial directory name - SEARCH IT!
       // this is slow, but the only way to get around case sensitivity
@@ -117,7 +119,7 @@ int adaptcase(char *fn)
   strcpy(fn, (*files)[l]);
   return 1;
 }
-      
 
-             
-  
+
+
+
