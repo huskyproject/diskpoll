@@ -2,12 +2,12 @@
 include ../../huskymak.cfg
 
 ifeq ($(DEBUG), 1)
-  CFLAGS=-DNOEXCEPTIONS -Wall -pedantic -O3 -g
+  CFLAGS=-Wall -pedantic -O3 -g
 else
-  CFLAGS=-DNOEXCEPTIONS -Wall -pedantic -O3 -s
+  CFLAGS=-Wall -pedantic -O3 -s
 endif
 
-CDEFS=$(ADDCDEFS)
+CDEFS=-DNOEXCEPTIONS $(ADDCDEFS)
 
 .cc$(OBJ):
 	$(GPP) -c $(CFLAGS) $(CDEFS) $<
@@ -27,21 +27,21 @@ OBJFILES = \
  prepcfg$(OBJ) \
  log$(OBJ)
 
-default: diskpoll
+default: diskpoll$(EXE)
 
-all: diskpoll
+all: diskpoll$(EXE)
 
 diskpoll: $(OBJFILES)
-	$(GPP) $(CFLAGS) $(CDEFS) -o diskpoll $(OBJFILES)
+	$(GPP) $(CFLAGS) $(CDEFS) -o diskpoll$(EXE) $(OBJFILES)
 
 install:
-	install $(IBOPT) diskpoll $(BINDIR)
+	$(INSTALL) $(IBOPT) diskpoll$(EXE) $(BINDIR)
 
 clean:
-	-rm *.o
-	-rm core
-	-rm *~
+	-$(RM) *$(OBJ)
+	-$(RM) core
+	-$(RM) *~
 
 distclean: clean
-	-rm diskpoll$(EXE)
+	-$(RM) diskpoll$(EXE)
 
