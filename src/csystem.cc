@@ -9,9 +9,9 @@
 
 CSystem::CSystem()
 {
-  pAkas    =(CArray<CNode>*) NULL; 
-  pInbound =(CInbound*)      NULL; 
-  pOutbound=(COutbound*)     NULL; 
+  pAkas    =(CArray<CNode>*) NULL;
+  pInbound =(CInbound*)      NULL;
+  pOutbound=(COutbound*)     NULL;
   strName  =                 NULLSTRING;
 }
 
@@ -38,13 +38,13 @@ CSystem& CSystem::operator=(const CSystem&s)
   if (pInbound)  delete pInbound;
   if (pOutbound) delete pOutbound;
   //  pOutbound=new COutbound(*(s.pOutbound)); this line is the problem
-  pInbound =new CInbound (*(s.pInbound)); 
+  pInbound =new CInbound (*(s.pInbound));
   //  pAkas    =new CArray<CNode>(*(s.pAkas));
   strName  =s.strName;
 
   return (*this);
 }
-  
+
 
 
 CSystem::~CSystem()
@@ -79,7 +79,7 @@ const CString& CSystem::getName() const
 
 void CSystem::poll(CSystem& uplink, int sendFlavour, int receiveFlavour)
 {
-  unsigned long i;
+  unsigned long i,j;
   int recerr;
 
   logmsg(LOGMSG,"CONNECT: Uplink: %s, Downlink: %s",
@@ -87,8 +87,7 @@ void CSystem::poll(CSystem& uplink, int sendFlavour, int receiveFlavour)
 
   for (i=0;i<uplink.pAkas->Size();i++)
     {
-      unsigned long j;
-         
+
       /* Send my files to uplink */
 
       if (pOutbound->lockNode((*(uplink.pAkas))[i]))
@@ -125,7 +124,7 @@ void CSystem::poll(CSystem& uplink, int sendFlavour, int receiveFlavour)
 
           pOutbound->removeFilesFor((*(uplink.pAkas))[i],&sentFiles);
           delete pFiles;
-          
+
           pOutbound->unlockNode((*(uplink.pAkas))[i]);
         }
       else
@@ -133,8 +132,10 @@ void CSystem::poll(CSystem& uplink, int sendFlavour, int receiveFlavour)
           logmsg(LOGERR,"Downlink reports: Other node sending to %s",
                  LOGNODE((*(uplink.pAkas))[i]));
         }
-      
+    }
 
+  for (i=0;i<pAkas->Size();i++)
+    {
 
       /* Receive files from uplink */
 
@@ -144,13 +145,13 @@ void CSystem::poll(CSystem& uplink, int sendFlavour, int receiveFlavour)
               pFiles=uplink.pOutbound->getFilesFor((*pAkas)[i],
                                                    receiveFlavour);
           CArray<CSendFile> receivedFiles;
-      
+
           logmsg(LOGMSG,"Selected %lu files to receive at %s",
                  pFiles->Size(), LOGNODE((*pAkas)[i]));
 
           for (j=0;j<pFiles->Size();j++)
             {
-               
+
               recerr = pInbound->Receive((*pFiles)[j].Filename(),
                                          (*pFiles)[j].Killflag());
               if (recerr == RECERR_NOERROR)
@@ -182,7 +183,7 @@ void CSystem::poll(CSystem& uplink, int sendFlavour, int receiveFlavour)
     }
   logmsg(LOGMSG,"DISCONNECT");
 }
-       
+
                                 // this function builds a system descriptor
                                 // class from an input stream. the input stream
                                 // is expected to be a text stream containing
@@ -215,13 +216,13 @@ istream& operator >> (istream& ifs, CSystem& system)
       CString strKeyword;
       TWords  words("");
       int     nwords;
-      
+
       if (ifs.peek()=='[')        // new section begins
         break;
 
       ifs >> strLine;
       words=prepareConfigString(strLine); nwords=words.getNWords();
-      
+
       if (!nwords)              // empty line
         continue;
 
@@ -229,17 +230,17 @@ istream& operator >> (istream& ifs, CSystem& system)
       if (strKeyword=="OUTBOUNDTYPE")
         {
           if (nwords<2)
-            { 
+            {
               error=1; break;
             }
 
           strOutboundType=words.getWord(1);
-          
+
           if (pOutboundOptions!=NULL)
             delete pOutboundOptions;
-          
+
           pOutboundOptions=new TWords(words);
-          
+
         } else
       if (strKeyword=="OUTBOUNDBASE")
         {
@@ -261,14 +262,14 @@ istream& operator >> (istream& ifs, CSystem& system)
             }
           system.pAkas->Add(node);
         } else { error=1; break; }
-          
+
     }
 
   if (error)
-    logmsg(LOGERR,"System [%s]: Syntax error: \"%s\"", 
+    logmsg(LOGERR,"System [%s]: Syntax error: \"%s\"",
            (const char*) system.getName(),
            (char*)strLine);
-                                            
+
 
   if (!error)
     while (1)
@@ -307,7 +308,7 @@ istream& operator >> (istream& ifs, CSystem& system)
                 CArray<CString> *pflo=new CArray<CString>();
                 CArray<CString> *ploc=new CArray<CString>();
                 int i=2;
-                
+
                 if (strlen(pOutboundOptions->getWord(i))==1)
                   dirsep=pOutboundOptions->getWord(i++)[0];
 
@@ -340,7 +341,7 @@ istream& operator >> (istream& ifs, CSystem& system)
 
             if (error)
               break;
-            
+
             system.pOutbound=pBinkleyOutbound;
           }
         else if (upcase(strOutboundType)=="TRIVIAL")
@@ -367,7 +368,7 @@ istream& operator >> (istream& ifs, CSystem& system)
       if (system.pAkas)     delete system.pAkas;
       if (system.pInbound)  delete system.pInbound;
       if (system.pOutbound) delete system.pOutbound;
-    
+
       system.pAkas=0;
       system.pInbound=0;
       system.pOutbound=0;
@@ -386,4 +387,4 @@ istream& operator >> (istream& ifs, CSystem& system)
 }
 
 
-  
+
