@@ -2,12 +2,23 @@
 include ../huskymak.cfg
 
 ifeq ($(DEBUG), 1)
-  CFLAGS=-Wall -pedantic -O3 -g
+  CFLAGS=$(WARNFLAGS) $(DEBCFLAGS)
+  LFLAGS=$(DEBLFLAGS)
 else
-  CFLAGS=-Wall -pedantic -O3 -s
+  CFLAGS=$(WARNFLAGS) $(OPTCFLAGS)
+  LFLGAS=$(OPTLFLAGS)
 endif
 
-CDEFS=-DNOEXCEPTIONS $(ADDCDEFS)
+SRC_DIR=src/
+
+
+CDEFS=-DNOEXCEPTIONS $(ADDCDEFS) -Isrc
+
+.SUFFIXES:
+.SUFFIXES: .cc .c .o
+
+%$(OBJ): $(SRC_DIR)%.cc
+	$(GPP) -c $(CFLAGS) $(CDEFS) $(SRC_DIR)$*.cc
 
 OBJFILES = \
  main$(OBJ) \
@@ -28,11 +39,8 @@ default: diskpoll$(EXE)
 
 all: diskpoll$(EXE)
 
-%$(OBJ): src$(DIRSEP)%.cc
-	$(GPP) -c $(CFLAGS) $(CDEFS) $<
-
 diskpoll: $(OBJFILES)
-	$(GPP) $(CFLAGS) $(CDEFS) -o diskpoll$(EXE) $(OBJFILES)
+	$(GPP) $(LFLAGS) -o diskpoll$(EXE) $(OBJFILES)
 
 install:
 	$(INSTALL) $(IBOPT) diskpoll$(EXE) $(BINDIR)
