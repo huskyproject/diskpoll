@@ -28,9 +28,13 @@ static CString makeNewFilename(const CString& strName)
   char *lastch;
   static char altExts[]="0123456789abcdefghijklmnopqrstuvwxyz";
   size_t length;
+  size_t replace_pos;
 
   lastch=altExts;
   length = str.Length();
+  replace_pos = length - 1;
+
+  logmsg(LOGDBG, "%s %d\n", (const char *)str, length);
 
   /* Rename ?UT-Packets to .PKT */
   if (length > 4)
@@ -42,6 +46,8 @@ static CString makeNewFilename(const CString& strName)
           str.setCharAt(length-3,'p');
           str.setCharAt(length-2,'k');
           str.setCharAt(length-1,'t');
+          replace_pos = length - 5;  // don't modify PKT extension - modify
+                                     // base name instead!
         }
     }
 
@@ -55,7 +61,7 @@ static CString makeNewFilename(const CString& strName)
           ifs.close();               // file did exist - find new name
 
           if (*lastch)
-            str.charAt(length-1)=*(lastch++);
+            str.setCharAt(replace_pos, *(lastch++));
           else
             {
               str="";       // could not find a new name
@@ -105,6 +111,8 @@ int CInbound::Receive(const CString& strFilename, int killflag)
       return 0;           // name for destination file could not be found
     }
 
+  logmsg(LOGDBG, "Receiving %s as %s", (const char *)strFilename,
+                                       (const char *)strDestname);
   crc = copyfile(strDestname,strFilename);
   logmsg(LOGDBG, "CInbound::Receive: Return code of copyfile is %d",
          (int) crc);
