@@ -1,9 +1,10 @@
 # Makefile for GCC on Linux
 
-# include Husky-Makefile-Config
-include ../../huskymak.cfg
-
 GPP=g++
+DEBUG=0
+EXE=
+IBOPT=-s
+BINDIR=/usr/local/bin
 
 ifeq ($(DEBUG), 1)
   CFLAGS=-DNOEXCEPTIONS -Wall -pedantic -O3 -g
