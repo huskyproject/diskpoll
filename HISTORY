@@ -1,4 +1,5 @@
 Diskpoll 0.1.4, not yet released
+ - Adaptions for BeOS (merged from 0.1.3-stable branch)
 
 Diskpoll 0.1.3-stable, forked off for release on 05 Aug 2000
  - Diagnosed a bug in the OS/2 Warp 4 (without mpts/peer fixes) peer/requester
