@@ -64,9 +64,10 @@ merge them into my code and release a new version.
 
 III. COMPILING THE SOURCECODE
 
-NOTE:  OS/2 users will find a precomplied standalone executable in .\bin\os2,
-so they may skip reading this paragraph. The same applies for Windows NT,
-BeOS and DOS users.
+NOTE:  Diskpoll is distributed in two archives. diskpoll-0.1.3-src.tar.gz
+contains only source code. dpoll013.zip contains binaries for Windows NT,
+OS/2, DOS and linux (linked against libc.so.6) as well as the source code.
+Note: Diskpoll can also be compiled on BeOS without problems!
 
 The source code is fairly portable between Posix-Systems using the GCC
 compiler.  Non-ANSI-functions called are mainly getopt, opendir, readdir and
