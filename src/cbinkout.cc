@@ -388,6 +388,8 @@ CString CBinkleyOutbound::importFilenameFromFlowfile(const CString& flowName)
     if (retval.charAt(index)==outDirSep)
       retval.setCharAt(index,'/');
 
+  adaptcase(retval);
+
   return retval;
 }
 
