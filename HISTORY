@@ -1,0 +1,24 @@
+Diskpoll 0.1.2, Released 17 Nov 1998
+ - New: If the binkley outbound contains a reference to a file that
+   does not exist, the reference is removed from the flowfile. This
+   matches the behaviour that e.g. Binkley uses. (However, if the path
+   in the reference does not exist as well, it is NOT removed to
+   avoid removing all files fromm all flowfiles when the network path
+   translation  is misconfigured or something).
+ - New command line parameters: -s <flavour> and -r <flavour> specify the
+   flavour of the files to send or receive. <flavour> is a string consisting
+   of the letters "c", "i", "h", "d" and/or "n". If the -s and/or -r options
+   are omitted, their parameters default to "?", which means "any flavour".
+   These options do of course only work with a binkley outbound.
+ - Fixed a bug in environment variable detection (%% was not replaced by a
+   single percent character)
+ - Added support for Windows NT using RSXNT.
+ - Added support for DOS (DPMI required) using DJGPP.
+
+Diskpoll 0.1.1, Released 05 Jul 1998
+ - *.?UT packets are now renamed to *.PKT when they are copied to an
+   inbound directory
+ - Fix: Unpacked mail was not always transferred correctly.
+
+Diskpoll 0.1.0, Released 22 Mar 1998
+ - first public relase

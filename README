@@ -1,0 +1,335 @@
+DISKPOLL README
+
+CONTENTS
+
+I.   What does Diskpoll do?
+II.  Important Remarks
+III. Compiling the Sourcecode
+IV.  The Diskpoll Config File
+V.   Invoking Diskpoll
+VI.  Contacting the Author
+
+
+I. WHAT DOES DISKPOLL DO?
+
+Diskpoll is a program to transport FTN-style mail packages between Fidonet
+systems.  In contrast to a FTN mailer, Diskpoll does not do this via a
+modem line, but it does it via the file system.  As a consequence, the file
+systems of the Fidonet systems involved must be mutually accessible by each
+system.
+
+If you are a Fidonet node, you can for example use Diskpoll
+-  to transfer files between your node mailers outbound and your sysop
+   point mailer's inbound, if the machine running the sysop point is either
+   identical to the machine running the node or has direct access via LAN or
+   similar to the node mailers outbound drive,
+-  to transfer files between your node mailers outbound and your Fidogate
+   inbound directory,
+-  to transfer files from your mailers outbound onto a ZIP or JAZ disk
+   if you have downlinks in file nets that want to receive their files
+   on media rather than via a modem link.
+
+Diskpoll handles two types of Outbound directories:  Binkley style outbound
+and a "trivial" outbound, meaning a simple spooldir containing all files
+for the uplink, as for example the Fidogate outbound directory.  Diskpoll does
+NOT support Binkley-style domain setup (e.g.  Outbound names like "GERNET.021"
+and similar).
+
+
+II. IMPORTANT REMARKS
+
+License:  Diskpoll is public domain.  No GPL-style license or similar.  Simply
+do with the code or executable whatever you wish.  You don't have to pay, and
+you don't suffer any restrictions.
+
+Warranty:  I can't take any responsibility for any sort of damage this program
+might do to your system.  This program is a quick hack and certainly has some
+bug or other.
+
+Remarks:  This code is public domain because I would be ashamed of claiming
+copyright for it ;).  Diskpoll is a very quick hack - I coded it because I
+needed a program of this sort for my own system, but I had very little time for
+this task, so I just implemented the features I PERSONALLY needed, and I
+implemented them quick an dirty. Hence no 5D domain support, hence the large
+executable file, and hence the slow performance.  Plus, I did it in C++
+instead of standard C to gain some C++ experience, but of course the class
+design is not very nice and structured, as is always the case if you write
+your first program in a new programming language.  - So if you feel Diskpoll
+lacks some features, simply implement them yourself.  I don't think that I
+will find the time to do any work on Diskpoll besides bugfixes in the near
+future.  Feel free to send me your improvements, though, and I will try to
+merge them into my code and release a new version.
+
+
+III. COMPILING THE SOURCECODE
+
+NOTE:  OS/2 users will find a precomplied standalone executable in .\bin\os2,
+so they may skip reading this paragraph. The same applies for Windows NT and
+DOS users.
+
+The source code is fairly portable between Posix-Systems using the GCC
+compiler.  Non-ANSI-functions called are mainly getopt, opendir, readdir and
+closedir.  To my knowledge, EMX GCC is the only compiler that supports these
+commands on OS/2, and EMX GCC with RSXNT extensions is the only compiler
+that supports them on Windows NT.
+
+You should use "makefile.os2.emx" for OS/2 (it is designed for GNU make,
+found as GNUMAKE.ZIP on ftp.cdrom.com), "makefile.nt.rsx" for Windows
+95/98/NT, "makefile.djg" for DOS and "makefile" for Linux or other Unix
+systems.  "makefile.os2.egcs" is for the egcs 1.0 - derived OS/2
+pentium-optimized pgcc compiler from Andrew Zabolotny.
+
+There is a internal bug in GCC 2.7.2 though, that yields internal compiler
+errors when compiling with exception support.  Hence, the supplied makfiles
+(makefile.os2 for OS/2, makefile for Unix) conatain "-DNOEXCEPTIONS" in the
+CFLAGS variable.  If you have a newer version of GCC, you may replace
+"-DNOEXCEPTIONS" by "-fhandle-exceptions" (or "-fexceptions" if you use
+egcs).
+
+If you port to another Unix than FreeBSD or Linux, you might have to do some
+adaptions in envdeps.h.
+
+
+IV. THE DISKPOLL CONFIG FILE
+
+a) Where the file is searched
+
+Diskpoll reads a config file.  By default, this is "diskpoll.cfg", which is
+expected to be in the current working directory under OS/2, and in
+"/usr/local/etc" under Unix.  You can use the "-c" command line option to
+specify a different config file, e.g. "-c e:\test\test.cfg".
+
+b) What the config file contains and how it looks like
+
+The config file merely contains definitions of fidonet systems.  A definition
+of a fidonet system consists of
+
+  - the outbound base path
+  - the outbound type (Binkley or Trivial)
+  - some options specifig to the outbound type
+  - the inbound path
+  - the FTN addresses of this system.
+
+Each definition of a fidonet system is introduced by a config section, being an
+arbitrary name (without whitespaces) included in square brackets.  Here is a
+first example for a fidonet system definition:
+
+[Badnerland_BBS]
+outboundtype binkley
+outboundbase e:\mailer\mcm\outbound
+inbound      e:\mailer\mcm\inbound
+aka 2:2476/418.0
+aka 242:7600/0.0
+
+c) Description of the configuration keywords.
+
+  [<systemname>]
+
+     This name is used to identify the fidonet system. You will need it to
+     tell Diskpoll between which systems you want to establish a connection.
+     If you only have a total of two fidonet systems, simply call them "Uplink"
+     and "Downlink".
+
+  OutboundType <outboundtype> <options>
+
+     As <outboundtype>, you may specify either "Binkley" or "Trivial".
+     - A "Binkley" outbound is a static FTN mailer outbound system as it is
+       used by BinkleyTerm, Xenia, Cantaloup, McMail and others.
+     - A "Trivial" outbound is a directory which simply holds all files that
+       should be delivered to the uplink.  Note that a system with a "Trivial"
+       outbound can only have one uplink, because there is no possibiliy to
+       specify to which uplink files should be delivered in a "Trivial"
+       outbound.  A typical example for a "Trivial" outbound is the Fidogate
+       outbound directory.
+
+     A "Trivial" outbound does not take any options.  A "Binkley" outbound does
+     not require any options as well as long as Diskpoll runs on the same
+     machine where the Binkley outbound resides.  If Diskpoll runs on a
+     differnt machine, please see below (IV.d) for a description of the options
+     required.
+
+   Outboundbase <directory>
+
+     Name of the base directory of the outbound system.
+     - In case of a "Binkley" outbound this is the outbound directory of your
+       home zone.  (The home zone is the zone number of the first AKA
+       specified).  E.g.  "e:\inout\outbound".  Outbound directories for other
+       zones will be constructed like this:  "e:\inout\outbound.009" for Zone
+       number 9, "e:\inout\outbound.0f2" for Zone 242, and so on.
+     - In case of a "Trivial" outbound, this simply is the directory that holds
+       all outgoing files. E.g. "e:\gate\fidogate\ftnout".
+
+   Inbound <directory>
+
+     Name of the inbound directory of the system.  This is the directory, where
+     all mail that has been collected from the outbound directory of another
+     system (with which a connect had been made) will be stored.
+
+     If your system has more than one inbound (a "unprotected" or "normal"
+     inbound, and a "secure" or "protected" inbound), you can safely specify
+     the "secure" inbound.  Anyone who is able to directly access your hard
+     disk should already have been password-checked by your LAN software ... ;)
+
+   Aka <address>
+
+     Specifies a FTN address of the system.  This address may be 3D (e.g.
+     "2:2476/418"), 4D ("2:2476/418.0") or 5D ("2:2476/418.0@fidonet"), but
+     Diskpoll will only use four dimensions, i.e. it will not consider the
+     domain name.
+
+     Note that the address that is specified first will determine your home
+     zone (the zone for which, in a binkley outbound environment, no zone
+     number will be appended to the outbound directory path name).
+
+   Address <address>
+
+     Works the same way as "Aka". It is just a synonym.
+
+d) Notes on Binkley Outbounds distributed accross the LAN
+
+There is a problem if you try to access that is located on drive E:  on machine
+"SERVER" with a Diskpoll program running on machine "CLIENT", which has mounted
+the E:  from "SERVER" as a different drive letter (e.g.  "X:"), or even at a
+total different place in the file system (e.g.  "/var/spool/fido", if "CLIENT"
+is a Unix system.
+
+The problem arises because the Binkley outbound contains text files
+("Flowfiles") which contain absolute pathnames describing the files that should
+be sent.  These pathnames are true for "SERVER", but they are not true for
+"CLIENT".  Therefore, Diskpoll has to remap these filenames in order to become
+true filenames in the local environment where Diskpoll is running (i.e.
+"CLIENT").
+
+How this remapping is done can be specified as <options> to the "OutboundType"
+parameter.
+
+The first option should consist of a single character describing the directory
+separator which is valid on "SERVER".  This is "\" if "SERVER" is an OS/2
+machine, and "/" if "SERVER" is a Unix machine (running an Unix mailer like
+ifcico).
+
+The following options are of the form "<server_prefix>=<client_prefix>".  For
+all filenames that are taken out of the "Flowfiles" from the outbound on
+"SERVER" that start with "<server_prefix>", the "<server_prefix>" string will
+be replaced by the "<client_prefix>" string.  The matching of
+"<server_prefix>" is done case-insensitively if the directory separator is
+"\" (designating OS/2) and case-sensitively if the directory separator is "/"
+(designating Unix).
+
+Imagine "SERVER" is an OS/2 machine with the Outbound on drive E:, and the
+Client is an OS/2 machine which has mounted the Servers E-Drive as X:.  In this
+case, you would use:
+
+  outboundtype binkley \ e:=x:
+
+Now imagine "CLIENT" is a FreeBSD machine which has mounted the Server's
+E-Drive under /var/spool/fido" and the Server's F-Drive (which also might contain
+some files to send) under "/mnt/SERVER/f". In this case, you would use:
+
+  outboundtype binkley \ e:=/var/spool/fido f:=/mnt/SERVER/f
+
+e) A complete scenario
+
+Suppose you have an OS/2 machine which runs your node system with an OS/2
+mailer.  The outbound directory is e:\mailer\inout\outbound and the secure
+inbound directory is e:\mailer\inout\secure.  Suppose you also have an FreeBSD
+machine which runs Fidogate.  The FTN in-/out-directories are
+/var/spool/fido/in and /var/spool/fido/out.
+
+The OS/2 machine has mounted the FreeBSD machine's /var/spool - Directory as
+drive X:.  The FreeBSD machine has mounted the OS/2 machine's E:  drive as
+"/mnt/PENTIUM/edrive".
+
+If you want to run Diskpoll on the FreeBSD machine, use the following
+configuration:
+
+  [Uplink]
+  outboundtype binkley \ e:=/mnt/PENTIUM/edrive
+  outboundbase /mnt/PENTIUM/edrive/mailer/inout/outbound
+  inbound      /mnt/PENTIUM/edrive/mailer/inout/secure
+  aka 2:2476/418.0
+  aka 242:7600/1.0
+
+  [Downlink]
+  outboundtype trivial
+  outboundbase /var/spool/fido/out
+  inbound      /var/spool/fido/in
+  aka 2:2476/418.42
+  aka 242:7600/1.42
+
+If you want to run Diskpoll on the OS/2 machine, use the following:
+
+  [Uplink]
+  outboundtype binkley
+  outboundbase e:\mailer\inout\outbound
+  inbound      e:\mailer\inout\secure
+  aka 2:2476/418.0
+  aka 242:7600/1.0
+
+  [Downlink]
+  outboundtype trivial
+  outboundbase x:\fido\out
+  inbound      x:\fido\in
+  aka 2:2476/418.42
+  aka 242:7600/1.42
+
+
+V. INVOKING DISKPOLL
+
+a) Syntax
+
+   diskpoll [-c <config-file>] [-r <flav>] [-s <flav>] [<uplink>] [<downlink]
+
+With -c<config-file>, you can specify the configuration file to use.  If
+omitted, the default is ".\diskpoll.cfg" for OS/2, NT and DOS, or
+"/usr/local/etc/diskpoll.cfg" for Unix.
+
+With -r <flav> and -s <flav> you can restrict the flavours to receive from or
+send to the uplink. I.E. if you specify "-s ndci", all files that you have on
+normal, direct, crash, or immediate for the uplink will be sent, but those on
+hold will not. If the -r and or -s options are not specified, they default to
+"-s ?" and "-r ?", which means "send and receive anything".
+
+With <uplink> you specify the name of the system to use as uplink during
+the disk poll.  This must correspond (case-sensitively) to the word in square
+brackets introducing the system definition in the configuration file.  If none
+is specified, the default is "Uplink".
+
+With <downlink> you specify the name of the system to use as downlink.  If
+none is specified, the default is "Downlink".
+
+b) Logging
+
+You might have noted that diskpoll does not write a log file.  If you want a
+logfile, you should invoke diskpoll like this:
+
+   diskpoll  >diskpoll.log 2>&1
+
+Place any other options you might want to specify between "diskpoll" and 
+">diskpoll.log"
+
+If you want to both see screen output and have a logfile, you might use the
+"tee" utility:
+
+   diskpoll 2>&1 | tee -a diskpoll.log
+
+"tee" is also available for OS/2, it is contained in GNUSUTIL.ZIP.
+
+c) Performance considerations
+
+If you have the choice of running Diskpoll on either an OS/2 or a Unix machine,
+run it on the OS/2 machine.  Diskpoll uses some OS/2 APIs that accelerate the
+copying process a lot (compared to diskpolls own copy routine which is used in
+the Unix version). The NT version also uses a special Windows API for file
+copying, but I have not bothered to examing if it really is faster.
+
+
+VI. Contacting the autor
+
+Fidonet: Tobias Ernst @ 2:2476/418
+e-mail:  tobi@bland.fido.de
+
+The latest distribution archive of Diskpoll can be obtained by fidonet
+filerequest of the magic "DISKPOLL" at 2:2476/418.
+
+[EOF]

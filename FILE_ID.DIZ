@@ -1,0 +1,13 @@
+Diskpoll 0.1.2 - Public Domain by T. Ernst
+Diskpoll exchanges mail  and files between
+FTN systems that have mutual access to the
+filesystems    where    their     outbound
+directories   are  stored.   You  can  use
+diskpoll to transfer  mail  from your node
+mailer's  outbound  to  your  sysop  point
+system's inbound or to a fidogate  inbound
+directory.   Supports  Binkley  style  and
+"plain"  outbound  directories.   Includes
+english documentation, source code for any
+Unix-like system  (including  Linux),  and
+standalone OS/2, DOS and Win32 binaries.
