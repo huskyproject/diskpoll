@@ -57,12 +57,12 @@ static CString strip_comments (const CString& rawString)
   unsigned long termPos;
 
   for (termPos=0;termPos<rawString.Length();termPos++)
-    if (rawString[termPos]==';')
+    if (rawString.charAt(termPos)==';')
       {
         if (termPos==0)
           break;
         if (termPos>0)
-          if (isspace(rawString[termPos-1]))
+          if (isspace(rawString.charAt(termPos-1)))
             break;
       }
 

@@ -11,7 +11,8 @@ CArray<CString>* findfile(const CString& mask)
   CString strDir,strMask;
                                 // find the corresponding directory name
   for (index=mask.Length();index>0;index--)
-    if (mask[index-1]=='\\'||mask[index-1]=='/'||mask[index-1]==':')
+    if (mask.charAt(index-1)=='\\'||mask.charAt(index-1)=='/'||
+        mask.charAt(index-1)==':')
       break;
 
   if (!index)                   // no directory information
@@ -19,7 +20,7 @@ CArray<CString>* findfile(const CString& mask)
   else
     {
       strDir=mask.substr(0,index-1);
-      if (strDir[index-1]==':')
+      if (strDir.charAt(index-1)==':')
         strDir+=".";
       else
         if (index>=2) 

@@ -121,7 +121,7 @@ CArray<CSendFile>* CBinkleyOutbound::getFilesFor(const CNode&n, int flavour)
                       f >> rawInput;
                       if (rawInput.Length())
                         {
-                          switch (rawInput[0])
+                          switch (rawInput.charAt(0))
                             {
                             case '~':
                               continue; // skip this one
@@ -262,11 +262,14 @@ int CBinkleyOutbound::removeFilesFor(const CNode& n, CArray<CSendFile>* pFiles)
 
 
 CBinkleyOutbound::CBinkleyOutbound():COutbound()
-{ baseZone=2; outDirSep=DEFDIRSEP; pFloFilePrefixes=pLocFilePrefixes=NULL; }
+{ baseZone=2; outDirSep=DEFDIRSEP; 
+  pFloFilePrefixes=pLocFilePrefixes=(CArray<CString>*)NULL; 
+}
+
 CBinkleyOutbound::CBinkleyOutbound(const CString& strBasepath, long ownZone)
   :COutbound(strBasepath)
-{ baseZone=ownZone;
-  outDirSep=DEFDIRSEP; pFloFilePrefixes=pLocFilePrefixes=NULL;
+{ baseZone=ownZone; outDirSep=DEFDIRSEP; 
+  pFloFilePrefixes=pLocFilePrefixes=(CArray<CString>*)NULL;
 }
 
 void CBinkleyOutbound::setLanReplaceCharacteristics
@@ -283,7 +286,9 @@ void CBinkleyOutbound::setLanReplaceCharacteristics
 
 CBinkleyOutbound::~CBinkleyOutbound()
 {
-  setLanReplaceCharacteristics(NULL,NULL,outDirSep);
+  setLanReplaceCharacteristics((CArray<CString>*)NULL,
+                               (CArray<CString>*)NULL,
+                               outDirSep);
 }
 
 static int fileExists(const CString& cpFilename)
@@ -365,8 +370,8 @@ CString CBinkleyOutbound::importFilenameFromFlowfile(const CString& flowName)
     }
 
   for (index=0;index<retval.Length();index++)
-    if (retval[index]==outDirSep)
-      retval[index]='/';
+    if (retval.charAt(index)==outDirSep)
+      retval.setCharAt(index,'/');
 
   return retval;
 }
@@ -413,8 +418,8 @@ CString CBinkleyOutbound::exportFilenameToFlowfile(const CString& locName)
     }
 
   for (index=0;index<retval.Length();index++)
-    if (retval[index]=='/')
-      retval[index]=outDirSep;
+    if (retval.charAt(index)=='/')
+      retval.setCharAt(index,outDirSep);
 
   return retval;
 }

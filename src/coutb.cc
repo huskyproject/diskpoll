@@ -63,7 +63,7 @@ void COutbound::_stripSlash()
   
   if (strBasepath.Length())
     {
-      char& c=strBasepath[strBasepath.Length()-1];
+      char& c=strBasepath.charAt(strBasepath.Length()-1);
       if (c=='\\'||c=='/')
         c='\0';
       if (c==':')

@@ -120,6 +120,11 @@ CString& CString::operator =(const CString &s)
 }
 
 
+
+
+/* Due to bad class design in my code, the following does not work
+   any more with GCC 2.8 
+
 char& CString::operator[](const size_t index)
 { CheckUpperBound(index,length,"CString::operator[]");
   return *(buffer+index);
@@ -128,6 +133,19 @@ char& CString::operator[](const size_t index)
 char& CString::operator[](const size_t index) const
 { CheckUpperBound(index,length,"CString::operator[]");
   return *(buffer+index);
+}
+
+It is replaced with the following:
+*/
+
+char& CString::charAt(const size_t index) const
+{ CheckUpperBound(index,length,"CString::operator[]");
+  return *(buffer+index);
+}
+
+char& CString::setCharAt(const size_t index, const char& c)
+{ CheckUpperBound(index,length,"CString::operator[]");
+  return *(buffer+index) = c;
 }
 
 int CString::operator== (const CString &s) const
@@ -195,7 +213,7 @@ CString upcase(const CString& src)
   size_t i;
 
   for (i=0;i<src.Length();i++)
-    ret[i]=toupper(ret[i]);
+    ret.setCharAt(i,toupper(ret.charAt(i)));
 
   return ret;
 }

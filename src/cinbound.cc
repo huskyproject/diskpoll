@@ -6,9 +6,9 @@
 
 void CInbound::makevalidpath()
 {
-  if (!(strPath[strPath.Length()-1]==':'||
-        strPath[strPath.Length()-1]=='\\'||
-        strPath[strPath.Length()-1]=='/'))
+  if (!(strPath.charAt(strPath.Length()-1)==':'||
+        strPath.charAt(strPath.Length()-1)=='\\'||
+        strPath.charAt(strPath.Length()-1)=='/'))
     strPath+='/';
 }
 
@@ -34,13 +34,13 @@ static CString makeNewFilename(const CString& strName)
   /* Rename ?UT-Packets to .PKT */
   if (length > 4)
     {
-      if (toupper(str[length-1]) == 'T' &&
-          toupper(str[length-2]) == 'U' &&
-          toupper(str[length-4]) == '.')
+      if (toupper(str.charAt(length-1)) == 'T' &&
+          toupper(str.charAt(length-2)) == 'U' &&
+          toupper(str.charAt(length-4)) == '.')
         {
-          str[length-3] = 'p';
-          str[length-2] = 'k';
-          str[length-1] = 't';
+          str.setCharAt(length-3,'p');
+          str.setCharAt(length-2,'k');
+          str.setCharAt(length-1,'t');
         }
     }
 
@@ -54,7 +54,7 @@ static CString makeNewFilename(const CString& strName)
           ifs.close();               // file did exist - find new name
 
           if (*lastch)
-            str[length-1]=*(lastch++);
+            str.charAt(length-1)=*(lastch++);
           else
             {
               str="";       // could not find a new name
@@ -77,9 +77,9 @@ int CInbound::Receive(const CString& strFilename, int killflag)
   int crc;
                                 // find the corresponding directory name
   for (index=strFilename.Length();index>0;index--)
-    if (strFilename[index-1]=='\\'||
-        strFilename[index-1]=='/'||
-        strFilename[index-1]==':')
+    if (strFilename.charAt(index-1)=='\\'||
+        strFilename.charAt(index-1)=='/'||
+        strFilename.charAt(index-1)==':')
       break;
 
   if (index<strFilename.Length()||strFilename.Length()==0)

@@ -32,7 +32,7 @@ static int getSectionName(const CString& strLine, CString& strSectionname)
 
   if (strRaw.Length()<3)
     return 2;
-  if (strRaw[0]!='['||strRaw[strRaw.Length()-1]!=']')
+  if (strRaw.charAt(0)!='[' || strRaw.charAt(strRaw.Length()-1)!=']')
     return 2;
 
   strSectionname=strRaw.substr(1,strRaw.Length()-2);
@@ -72,7 +72,9 @@ static void doCall(const CString& strConfig, const CString& strUplink, const
           
         default:                // new section
           {
-            CSystem *paSystem=new CSystem(NULL,NULL,NULL,strSectionname);
+            CSystem *paSystem=new CSystem((COutbound*)NULL,
+                                          (CInbound*)NULL,
+                                          (CArray<CNode>*)NULL,strSectionname);
             CheckPointer(paSystem,"main.cc: doCall()");
             ifs >> *paSystem;
             if (ifs.fail())
@@ -202,7 +204,7 @@ int main(int argc, char **argv)
     }
   else
     {
-      logmsg(LOGMSG,NULL);
+      logmsg(LOGMSG,(char *)NULL);
       logmsg(LOGMSG,"Begin: %s",PROGRAMID);
       doCall(cpConfigfile,cpUplink,cpDownlink, sendFlavour, receiveFlavour);
       logmsg(LOGMSG,"End: %s",PROGRAMID);

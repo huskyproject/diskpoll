@@ -21,8 +21,10 @@ class CString
              CString& operator +=(const CString &);
              CString& operator +=(const char&);
              CString& operator =(const CString &);
-             char& operator[](const size_t index);
-             char& operator[](const size_t index) const;
+             char&   charAt(const size_t index) const;
+             char&   setCharAt(const size_t index, const char&);
+//             char& operator[](const size_t index);
+//             char& operator[](const size_t index) const;
              int operator== (const CString &) const;
              int operator== (const char *) const;
              int operator== (char *) const;
@@ -36,6 +38,6 @@ class CString
 
 CString upcase(const CString& src);
 
-#define NULLSTRING CString(NULL)
+#define NULLSTRING CString((char *)NULL)
 
 #endif

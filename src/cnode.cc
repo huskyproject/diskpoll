@@ -88,16 +88,16 @@ int CNode::makeFromString(const CString& str)
 {
 
   CString dummy(str);
-  char *cpDummy=dummy;
-  char *cpZone=NULL;
-  char *cpColon=NULL;
-  char *cpNet=NULL;
-  char *cpSlash=NULL;
-  char *cpNode=NULL;
-  char *cpPoint=NULL;
-  char *cpPointnumber=NULL;
-  char *cpAt=NULL;
-  char *cpDomain=NULL;
+  char *cpDummy =dummy;
+  char *cpZone  =(char*)NULL;
+  char *cpColon =(char*)NULL;
+  char *cpNet   =(char*)NULL;
+  char *cpSlash =(char*)NULL;
+  char *cpNode  =(char*)NULL;
+  char *cpPoint =(char*)NULL;
+  char *cpPointnumber=(char*)NULL;
+  char *cpAt    =(char*)NULL;
+  char *cpDomain=(char*)NULL;
 
   if (cpDummy==NULL) goto error;
 
@@ -123,7 +123,7 @@ int CNode::makeFromString(const CString& str)
       cpPointnumber=cpPoint+1;
     }
   else
-    cpPointnumber=NULL;
+    cpPointnumber=(char*)NULL;
 
   if (cpAt!=NULL)
     {
@@ -131,7 +131,7 @@ int CNode::makeFromString(const CString& str)
       cpDomain=cpAt+1;
     }
   else
-    cpDomain=NULL;
+    cpDomain=(char*)NULL;
 
   if (!(sid(cpZone)&&sid(cpNet)&&sid(cpNode)))
     goto error;
@@ -162,7 +162,7 @@ error:
 ostream& operator << (ostream& o, const CNode& n)
 {
   o << n.Zone() << ":" << n.Net() << "/" << n.Node() << "." << n.Point();
-  if (!(CString(NULL)==n.Domain()))
+  if (!(CString((char*)NULL)==n.Domain()))
     {
       o << "@" << n.Domain();
     }

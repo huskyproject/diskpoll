@@ -9,7 +9,10 @@
 
 CSystem::CSystem()
 {
-  pAkas=NULL; pInbound=NULL; pOutbound=NULL; strName=NULLSTRING;
+  pAkas    =(CArray<CNode>*) NULL; 
+  pInbound =(CInbound*)      NULL; 
+  pOutbound=(COutbound*)     NULL; 
+  strName  =                 NULLSTRING;
 }
 
 CSystem::CSystem(COutbound* pout, CInbound* pin, CArray<CNode>* pad, const
