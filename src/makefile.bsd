@@ -1,7 +1,15 @@
-# Makefile for GCC on any UNIX platform
+# Makefile for GCC on FreeBSD
+
+# include Husky-Makefile-Config
+include ../../huskymak.cfg
 
 GPP=gcc
-CFLAGS=-DNOEXCEPTIONS -Wall -pedantic -g -DNEED_UNISTDH
+
+ifeq ($(DEBUG), 1)
+  CFLAGS=-DNOEXCEPTIONS -Wall -pedantic -g -DNEED_UNISTDH
+else
+  CFLAGS=-DNOEXCEPTIONS -Wall -pedantic -s -DNEED_UNISTDH
+endif
 
 .cc.o:
 	$(GPP) -c $(CFLAGS) $<
@@ -21,14 +29,21 @@ OBJFILES = \
  prepcfg.o \
  log.o
 
-default: test$(EXE)
+all: diskpoll
 
-test$(EXE): $(OBJFILES)
-	$(GPP) $(CFLAGS) -o diskpoll$(EXE) $(OBJFILES) -lstdc++ -g
+default: diskpoll
+
+diskpoll: $(OBJFILES)
+	$(GPP) $(CFLAGS) -o diskpoll $(OBJFILES) -lstdc++
+
+install: diskpoll
+	install $(IBOPT) diskpoll $(BINDIR)
 
 clean:
 	-rm *.o
 	-rm core
-	-rm diskpoll$(EXE)
 	-rm *~
+
+distclean: clean
+	-rm diskpoll
 
