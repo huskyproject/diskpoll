@@ -2,10 +2,12 @@
 #include "cnode.h"
 #include "csystem.h"
 #include <stdlib.h>             // NULL
+#include <fstream.h>            // ofstream
 #include "log.h"
 #include "prepcfg.h"
 #include "cbinkout.h"
 #include "csplout.h"
+#include "findfile.h"
 
 CSystem::CSystem()
 {
@@ -13,21 +15,24 @@ CSystem::CSystem()
   pInbound =(CInbound*)      NULL;
   pOutbound=(COutbound*)     NULL;
   strName  =                 NULLSTRING;
+  strMailFlag =              NULLSTRING;
 }
 
 CSystem::CSystem(COutbound* pout, CInbound* pin, CArray<CNode>* pad, const
-                 CString& str)
+                 CString& str, const CString& mf)
 {
   pAkas=NULL; pInbound=NULL; pOutbound=NULL;
   setInbound(pin);
   setOutbound(pout);
   setAkas(pad);
   strName=str;
+  strMailFlag=mf;
 }
 
 CSystem::CSystem(const CSystem& s)
 {
   pAkas=NULL; pInbound=NULL; pOutbound=NULL; strName=NULLSTRING;
+  strMailFlag = NULLSTRING;
   (*this)=s;
 }
 
@@ -41,11 +46,10 @@ CSystem& CSystem::operator=(const CSystem&s)
   pInbound =new CInbound (*(s.pInbound));
   //  pAkas    =new CArray<CNode>(*(s.pAkas));
   strName  =s.strName;
+  strMailFlag = s.strMailFlag;
 
   return (*this);
 }
-
-
 
 CSystem::~CSystem()
 {
@@ -70,6 +74,16 @@ void CSystem::setAkas(CArray<CNode>* pakas)
 {
   if (pAkas) delete pAkas;
   pAkas=pakas;
+}
+
+void CSystem::setMailFlag(const CString& mf)
+{
+  strMailFlag = mf;
+}
+
+const CString& CSystem::getMailFlag() const
+{
+  return strMailFlag;
 }
 
 const CString& CSystem::getName() const
@@ -181,6 +195,18 @@ void CSystem::poll(CSystem& uplink, int sendFlavour, int receiveFlavour)
         logmsg(LOGERR,"Uplink reports: Other node sending to %s",
                LOGNODE((*pAkas)[i]));
     }
+  if (uplink.pInbound->gotMail() && !(uplink.getMailFlag() == NULLSTRING))
+    {
+      ofstream f(uplink.getMailFlag());
+      f.close();
+      logmsg(LOGMSG,"Created flag file %s", (const char*)(uplink.getMailFlag()));
+    }
+  if (pInbound->gotMail() && !(getMailFlag() == NULLSTRING))
+    {
+      ofstream f(getMailFlag());
+      f.close();
+      logmsg(LOGMSG,"Created flag file %s", (const char *)(getMailFlag()));
+    }
   logmsg(LOGMSG,"DISCONNECT");
 }
 
@@ -205,6 +231,7 @@ istream& operator >> (istream& ifs, CSystem& system)
   CString strOutboundType=NULLSTRING;
   CString strOutboundBase=NULLSTRING;
   CString strInbound=NULLSTRING;
+  CString strMailFlag=NULLSTRING;
 
   CString strLine;
 
@@ -246,6 +273,12 @@ istream& operator >> (istream& ifs, CSystem& system)
         {
 
           strOutboundBase=words.getWord(1);
+        } else
+      if (strKeyword=="MAILFLAG")
+        {
+          if (nwords!=2) { error=1; break; }
+          strMailFlag=words.getWord(1);
+          adaptcase(strMailFlag);
         } else
       if (strKeyword=="INBOUND")
         {
@@ -356,6 +389,11 @@ istream& operator >> (istream& ifs, CSystem& system)
                     (const char*)system.getName(), (char*)strOutboundType);
             error=1;
             break;
+          }
+
+        if (!(strMailFlag == NULLSTRING))
+          {
+            system.setMailFlag(strMailFlag);
           }
 
         break;

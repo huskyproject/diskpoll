@@ -475,9 +475,12 @@ CArray<CString>* findfile(const CString& mask)
   CString strDir,strMask;
                                 // find the corresponding directory name
   for (index=mask.Length();index>0;index--)
-    if (mask.charAt(index-1)=='\\'||mask.charAt(index-1)=='/'||
-        mask.charAt(index-1)==':')
-      break;
+    {
+        if (mask.charAt(index-1)=='\\' ||
+            mask.charAt(index-1)=='/'  ||
+            mask.charAt(index-1)==':')
+            break;
+    }
 
   if (!index)                   // no directory information
     strDir=".";
@@ -527,7 +530,13 @@ CArray<CString>* findfile(const CString& mask)
   for (unsigned long ndir = 0; ndir < dirs->Size(); ndir++)
     {
       DIR *hDir;
-      if ((*dirs)[ndir].Length())
+      if (((*dirs)[ndir].Length() == 2) && ((*dirs)[ndir].charAt(1) == ':'))
+        {
+          CString s = ((*dirs)[ndir]);
+          s+=DEFDIRSEP;
+          hDir=opendir(s);
+        }
+      else if ((*dirs)[ndir].Length())
         hDir=opendir((*dirs)[ndir]);
       else
         {
@@ -570,6 +579,7 @@ int adaptcase(char *fn)
 {
   CArray<CString> *files = findfile(fn);
   unsigned long l = 0;
+  const char *cp;
 
   if (files == NULL || files->Size() == 0)
     {
@@ -592,9 +602,18 @@ int adaptcase(char *fn)
         }
     }
 
-  CheckCond((strlen((*files)[l]) == strlen(fn)),
+  cp = (const char *)((*files)[l]);
+  if (cp[0]=='.' && (cp[1] == '/' || cp[1] == '\\'))
+    {
+      if (fn[0] != '.')
+        {
+          cp += 2;
+        }
+    }
+  
+  CheckCond((strlen(cp) == strlen(fn)),
             "adaptcase used with wildcards");
-  strcpy(fn, (*files)[l]);
+  strcpy(fn, cp);
   return 1;
 }
 

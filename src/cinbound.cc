@@ -48,7 +48,7 @@ static CString makeNewFilename(const CString& strName)
     {
       while (1)
         {
-          ifstream ifs(str,ios::binary|ios::in);
+          ifstream ifs(str,ios::bin|ios::in);
           if (!ifs)                  // file does not exist
             break;
           ifs.close();               // file did exist - find new name
@@ -67,8 +67,12 @@ static CString makeNewFilename(const CString& strName)
 }
 
 
-CInbound::CInbound():strPath(){ makevalidpath(); }
-CInbound::CInbound(const CString&r):strPath(r){ makevalidpath(); }
+CInbound::CInbound():strPath(){ makevalidpath(); receivedAnything = 0;}
+CInbound::CInbound(const CString&r):strPath(r)
+{
+    makevalidpath();
+    receivedAnything = 0;
+}
 
 int CInbound::Receive(const CString& strFilename, int killflag)
 {
@@ -102,9 +106,16 @@ int CInbound::Receive(const CString& strFilename, int killflag)
           ofstream f(strFilename);
           f.close();
         }
+      receivedAnything = 1;
       return RECERR_NOERROR;
     case COPY_NOTEXIST:
       return RECERR_NOTEXIST;
     }
   return RECERR_OTHER;
 }
+
+int CInbound::gotMail(void)
+{
+  return receivedAnything;
+}
+

@@ -12,11 +12,13 @@ class CInbound
 private:
   CString strPath;
   void makevalidpath();
+  int receivedAnything;
 
 public:
   CInbound();
   CInbound(const CString&);
 
   int Receive(const CString& strFilename, int killflag=KILL_NOKILL);
+  int gotMail();
 };
 #endif

@@ -127,7 +127,7 @@ int main(int argc, char **argv)
   const char *cpUplink  ="Uplink";
   const char *cpDownlink="Downlink";
   int sendFlavour = -1, receiveFlavour = -1;
-  
+
   optind=1; opterr=0;
   while ((i=getopt(argc,argv,"s:r:c:h"))!=-1)
     {

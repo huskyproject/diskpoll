@@ -19,10 +19,12 @@ private:
   CInbound        *pInbound;
   COutbound       *pOutbound;
   CString          strName;     /* just an identifier for logging purposes */
+  CString          strMailFlag;
 
 public:
   CSystem();
-  CSystem(COutbound*, CInbound*, CArray<CNode>*, const CString& = NULLSTRING);
+  CSystem(COutbound*, CInbound*, CArray<CNode>*, const CString& = NULLSTRING,
+          const CString& = NULLSTRING);
   ~CSystem();
   CSystem(const CSystem&);
   CSystem& operator=(const CSystem&);
@@ -32,9 +34,10 @@ public:
   void setInbound (CInbound*);
   void setOutbound(COutbound*);
   void setAkas(CArray<CNode>*);
+  void setMailFlag (const CString&);
 
   const CString& getName() const;
-
+  const CString& getMailFlag() const;
 
   void poll(CSystem&, int = -1, int = -1);
 };

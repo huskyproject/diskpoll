@@ -76,10 +76,10 @@ int copyfile(const char *cpDest, const char *cpSource)
   static unsigned char *cpBuf=new unsigned char[BUFLEN];
   int retval=COPY_NOERR;
 
-  ofstream fo(cpDest,ios::binary|ios::out);
+  ofstream fo(cpDest,ios::bin|ios::out);
   if (!fo) return COPY_OTHER;
 
-  ifstream fi(cpSource,ios::binary|ios::in);
+  ifstream fi(cpSource,ios::bin|ios::in);
   if (!fi) 
     { 
       fo.close();

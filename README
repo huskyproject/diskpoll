@@ -118,6 +118,7 @@ first example for a fidonet system definition:
 outboundtype binkley
 outboundbase e:\mailer\mcm\outbound
 inbound      e:\mailer\mcm\inbound
+mailflag     e:\mailer\flags\btmail.in
 aka 2:2476/418.0
 aka 242:7600/0.0
 
@@ -184,6 +185,12 @@ c) Description of the configuration keywords.
    Address <address>
 
      Works the same way as "Aka". It is just a synonym.
+
+   Mailflag <filename>
+   
+     The file with the given <filename> and zero length will be created if
+     this particular system has received any files during a diskpoll transfer.
+     You can use this to notify the remote site to immediately toss the mail.
 
 d) Notes on Binkley Outbounds distributed accross the LAN
 

@@ -15,7 +15,7 @@
 #else
 #define VSNPRINTF(a,b,c,d) vsnprintf(a,b,c,d)    // emx as vsnprintf!
 #define NEED_GETOPTH           // include getopt.h when using getopt
-#define SHORTINCLUDEFILENAMES  // use strstrea.h, not strstream.h
+//#define SHORTINCLUDEFILENAMES  // use strstrea.h, not strstream.h
 #define DEFDIRSEP '\\'
 #define DEFCONFIGFILE "./diskpoll.cfg"
 #define ALLFILES "*"
@@ -34,7 +34,7 @@
 #include <sys/stat.h> /* mkdir */
 #define mymkdir(a) mkdir((a), 0)
 
-// ------- DOS with any other compiler ------- 
+// ------- DOS with any other compiler -------
 #elif defined __DOS__
 #error "The DOS version requires DJGPP as compiler!"
 
@@ -46,19 +46,20 @@
 #else
 #define VSNPRINTF(a,b,c,d) vsprintf(a,c,d)
 #endif
+#ifndef __FreeBSD__
 #define NEED_GETOPTH
+#endif
 //#define SHORTINCLUDEFILENAMES
 #define DEFDIRSEP '/'
 #define DEFCONFIGFILE "/usr/local/etc/diskpoll.cfg"
 #define ALLFILES "*"
-#endif
 #include <sys/stat.h> /* for mkdir */
 #if defined(__FreeBSD__) || defined(_AIX) || defined(__osf__)
-#define mymkdir(a) mkdir((a), 0700)
+#define mymkdir(a) mkdir((a), 0777)
 #else
-#define mymkdir(a) __mkdir((a), 0700)
+#define mymkdir(a) __mkdir((a), 0777)
 #endif
-
+#endif
 
 
 #endif

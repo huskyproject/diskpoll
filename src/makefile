@@ -1,6 +1,6 @@
 # Makefile for GCC on any UNIX platform
 
-GPP=gcc
+GPP=g++
 CFLAGS=-DNOEXCEPTIONS -Wall -pedantic -O3
 
 .cc.o:
@@ -24,7 +24,7 @@ OBJFILES = \
 default: test$(EXE)
 
 test$(EXE): $(OBJFILES)
-	$(GPP) $(CFLAGS) -o diskpoll$(EXE) $(OBJFILES) -lstdc++ -s
+	$(GPP) $(CFLAGS) -o diskpoll$(EXE) $(OBJFILES) -s
 
 clean:
 	-rm *.o
