@@ -1,7 +1,7 @@
 # Makefile for GCC on any UNIX platform
 
 GPP=gcc
-CFLAGS=-DNOEXCEPTIONS -Wall -pedantic -g
+CFLAGS=-DNOEXCEPTIONS -Wall -pedantic -O3
 
 .cc.o:
 	$(GPP) -c $(CFLAGS) $<
@@ -24,7 +24,7 @@ OBJFILES = \
 default: test$(EXE)
 
 test$(EXE): $(OBJFILES)
-	$(GPP) $(CFLAGS) -o diskpoll$(EXE) $(OBJFILES) -lstdc++ -g
+	$(GPP) $(CFLAGS) -o diskpoll$(EXE) $(OBJFILES) -lstdc++ -s
 
 clean:
 	-rm *.o

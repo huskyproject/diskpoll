@@ -13,7 +13,6 @@
 #if (!defined(__OS2__)) && (!defined(__NT__))
 #error "Only OS/2 or NT platforms supported for EMX gcc"
 #else
-#define FNM_FLAGS (_FNM_OS2 | _FNM_IGNORECASE)   // flags for fnmatch
 #define VSNPRINTF(a,b,c,d) vsnprintf(a,b,c,d)    // emx as vsnprintf!
 #define NEED_GETOPTH           // include getopt.h when using getopt
 #define SHORTINCLUDEFILENAMES  // use strstrea.h, not strstream.h
@@ -27,7 +26,6 @@
 
 // ------- These settings are for DOS/DPMI with DJGPP v2  -------
 #elif defined __DJGPP__
-#define FNM_FLAGS 0
 #define VSNPRINTF(a,b,c,d) vsprintf(a,c,d)
 #define NEED_UNISTDH
 #define DEFDIRSEP '\\'
@@ -42,7 +40,7 @@
 
 // ------- These settings are for Unix (FreeBSD, AIX, Linux, ...) -------
 #else 
-#define FNM_FLAGS FNM_CASEFOLD
+#define UNIXLIKE
 #ifdef  HAVE_VSNPRINTF
 #define VSNPRINTF(a,b,c,d) vsnprintf(a,b,c,d)
 #else
@@ -55,10 +53,10 @@
 #define ALLFILES "*"
 #endif
 #include <sys/stat.h> /* for mkdir */
-#if defined(__FreeBSD__) || defined(_AIX)
-#define mymkdir(a) mkdir((a), 0)
+#if defined(__FreeBSD__) || defined(_AIX) || defined(__osf__)
+#define mymkdir(a) mkdir((a), 0700)
 #else
-#define mymkdir(a) __mkdir((a), 0)
+#define mymkdir(a) __mkdir((a), 0700)
 #endif
 
 
