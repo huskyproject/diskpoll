@@ -45,6 +45,9 @@ diskpoll: $(OBJFILES)
 install:
 	$(INSTALL) $(IBOPT) diskpoll$(EXE) $(BINDIR)
 
+uninstall:
+	-$(RM) $(BINDIR)$(DIRSEP)diskpoll$(EXE)
+
 clean:
 	-$(RM) *$(OBJ)
 	-$(RM) core
